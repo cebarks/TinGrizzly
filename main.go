@@ -25,7 +25,7 @@ var (
 	last    = time.Now()
 
 	//StateManager global instacne
-	StateManager states.StateManager = states.StateManager{}
+	StateManager states.StateManager
 )
 
 func run() {
@@ -44,20 +44,12 @@ func run() {
 
 	win.Clear(colornames.Skyblue)
 
+	StateManager = states.StateManager{}
 	StateManager.Initialize()
 
 	for !win.Closed() {
 		win.Update()
-
-		//fps calculations
-		frames++
-		select {
-		case <-second:
-			lastFps = frames
-			win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, lastFps))
-			frames = 0
-		default:
-		}
+		fpsUpdate()
 
 		//Tick main game loop
 		gameLoop()
@@ -81,6 +73,18 @@ func update(dt float64) {
 
 func render(win pixelgl.Window) {
 	StateManager.ActiveState.Render(win)
+}
+
+func fpsUpdate() {
+	//fps calculations
+	frames++
+	select {
+	case <-second:
+		lastFps = frames
+		win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, lastFps))
+		frames = 0
+	default:
+	}
 }
 
 func main() {

@@ -2,7 +2,7 @@ package states
 
 // StateManager is reposible for holding information about the games current state and related information
 type StateManager struct {
-	ActiveState *State
+	ActiveState State
 	stateMap    map[string]State
 }
 
