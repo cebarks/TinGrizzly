@@ -1,3 +1,6 @@
+github.com/andygeiss/assert v0.0.9/go.mod h1:fCwXr8GkRVuJWDwiCS73+NTcHXyhQSx4uqV/0Fl5T3g=
+github.com/andygeiss/ecs v0.0.69 h1:yJEiS0I1iK5wodBhj6tnunGeE5lLfwlDaLDN7y3OzHw=
+github.com/andygeiss/ecs v0.0.69/go.mod h1:KG02Zz0oranMDsD/itrLWXyQ0pBg2G6hOmQWe7iz4u0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/faiface/glhf v0.0.0-20181018222622-82a6317ac380 h1:FvZ0mIGh6b3kOITxUnxS3tLZMh7yEoHo75v3/AgUqg0=
 github.com/faiface/glhf v0.0.0-20181018222622-82a6317ac380/go.mod h1:zqnPFFIuYFFxl7uH2gYByJwIVKG7fRqlqQCbzAnHs9g=
@@ -23,4 +26,6 @@ golang.org/x/image v0.0.0-20200801110659-972c09e46d76 h1:U7GPaoQyQmX+CBRWXKrvRzW
 golang.org/x/image v0.0.0-20200801110659-972c09e46d76/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/image v0.0.0-20200922025426-e59bae62ef32 h1:E+SEVulmY8U4+i6vSB88YSc2OKAFfvbHPU/uDTdQu7M=
 golang.org/x/image v0.0.0-20200922025426-e59bae62ef32/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
+golang.org/x/image v0.0.0-20200924062109-4578eab98f00 h1:9VSII+GM7HSMYSWsMcnMnDHKcDv2agce+07ISbE3llQ=
+golang.org/x/image v0.0.0-20200924062109-4578eab98f00/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
