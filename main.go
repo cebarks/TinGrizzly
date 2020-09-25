@@ -17,6 +17,7 @@ var (
 	windowTitle  = "Tin Grizzly!"
 	windowBounds = pixel.R(0, 0, 1600, 900)
 	windowVsync  = false
+	winCfg       pixelgl.WindowConfig
 
 	//fps vars
 	frames  = 0
@@ -31,13 +32,13 @@ var (
 func run() {
 	println("Launched!")
 
-	cfg := pixelgl.WindowConfig{
+	winCfg := pixelgl.WindowConfig{
 		Title:  windowTitle,
 		Bounds: windowBounds,
 		VSync:  windowVsync,
 	}
 
-	win, err := pixelgl.NewWindow(cfg)
+	win, err := pixelgl.NewWindow(winCfg)
 	if err != nil {
 		panic(err)
 	}
@@ -81,7 +82,7 @@ func fpsUpdate() {
 	select {
 	case <-second:
 		lastFps = frames
-		win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, lastFps))
+		win.SetTitle(fmt.Sprintf("%s | FPS: %d", winCfg.Title, lastFps))
 		frames = 0
 	default:
 	}
