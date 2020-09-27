@@ -1,69 +1,41 @@
 package main
 
 import (
-	"fmt"
+	"os"
 	"time"
 
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+
+	"github.com/cebarks/TinGrizzly/gfx"
 	"github.com/cebarks/TinGrizzly/states"
 
-	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-	"golang.org/x/image/colornames"
 )
 
 var (
-	//window settings
-	win          pixelgl.Window
-	windowTitle  = "Tin Grizzly!"
-	windowBounds = pixel.R(0, 0, 1600, 900)
-	windowVsync  = false
-	winCfg       pixelgl.WindowConfig
+	// dt calculation
+	lastTime = time.Now()
 
-	//fps vars
-	frames  = 0
-	lastFps = 0
-	second  = time.Tick(time.Second)
-	last    = time.Now()
-
-	//StateManager global instacne
+	//StateManager global instance
 	StateManager states.StateManager
+	//WindowManager global instance
+	WindowManager *gfx.WindowManager
 )
 
-func run() {
-	println("Launched!")
-
-	winCfg := pixelgl.WindowConfig{
-		Title:  windowTitle,
-		Bounds: windowBounds,
-		VSync:  windowVsync,
-	}
-
-	win, err := pixelgl.NewWindow(winCfg)
-	if err != nil {
-		panic(err)
-	}
-
-	win.Clear(colornames.Skyblue)
-
-	StateManager = states.StateManager{}
-	StateManager.Initialize()
-
-	for !win.Closed() {
-		win.Update()
-		fpsUpdate()
-
-		//Tick main game loop
-		gameLoop()
-	}
+func main() {
+	println("Launching...")
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	pixelgl.Run(run)
 }
 
 func gameLoop() {
 	//Calculate delta time for update calculations
-	dt := time.Since(last).Seconds()
-	last = time.Now()
+	dt := time.Since(lastTime).Seconds()
+	lastTime = time.Now()
 
 	update(dt)
-	render(win)
+	render(WindowManager.Window())
 }
 
 func update(dt float64) {
@@ -76,20 +48,19 @@ func render(win *pixelgl.Window) {
 	as.Render(win)
 }
 
-func fpsUpdate() {
-	//fps calculations
-	frames++
-	select {
-	case <-second:
-		lastFps = frames
-		win.SetTitle(fmt.Sprintf("%s | FPS: %d", winCfg.Title, lastFps))
-		frames = 0
-	default:
-	}
-}
+func run() {
+	println("Launched!")
 
-func main() {
-	println("Launching...")
-	pixelgl.Run(run)
 	StateManager = states.BuildStateManager()
+	WindowManager = &gfx.WindowManager{}
+
+	WindowManager.Initalize()
+	WindowManager.CreateWindow()
+
+	log.Print("Made it here!  =======================================")
+	for true {
+		// gameLoop()
+
+		WindowManager.Update()
+	}
 }
