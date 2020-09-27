@@ -7,10 +7,21 @@ type StateManager struct {
 }
 
 // Initialize all states
-func (st StateManager) Initialize() {
-	st.stateMap = map[string]State{}
-	st.stateMap["mainMenu"] = StateMainMenu{}
-	st.stateMap["dev"] = StateDevelopment{}
-	// gs.stateMap["overworld"] = StateOverWorld
-	// gs.stateMap["dungeon1"] = StateDungeon
+func (sm *StateManager) Initialize() {
+	// create map of state instances
+	sm.stateMap = map[string]State{}
+	sm.stateMap["null"] = StateNull{}
+	sm.stateMap["mainMenu"] = StateMainMenu{}
+	sm.stateMap["dev"] = StateDevelopment{}
+	// sm.stateMap["overworld"] = StateOverWorld
+	// sm.stateMap["dungeon1"] = StateDungeon
+
+	sm.ActiveState = sm.stateMap["null"]
+}
+
+// BuildStateManager returns a new StateManager already initialized with default values.
+func BuildStateManager() StateManager {
+	sm := StateManager{}
+	sm.Initialize()
+	return sm
 }

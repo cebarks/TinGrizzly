@@ -67,13 +67,13 @@ func gameLoop() {
 }
 
 func update(dt float64) {
-	StateManager.ActiveState.Update(dt)
-	x := StateManager.ActiveState
-	x.Start()
+	as := StateManager.ActiveState
+	as.Update(dt)
 }
 
-func render(win pixelgl.Window) {
-	StateManager.ActiveState.Render(win)
+func render(win *pixelgl.Window) {
+	as := StateManager.ActiveState
+	as.Render(win)
 }
 
 func fpsUpdate() {
@@ -91,4 +91,5 @@ func fpsUpdate() {
 func main() {
 	println("Launching...")
 	pixelgl.Run(run)
+	StateManager = states.BuildStateManager()
 }
