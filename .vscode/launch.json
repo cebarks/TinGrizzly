@@ -10,13 +10,13 @@
             "type": "go",
             "request": "launch",
             "mode": "exec",
-            "program": "${workspaceFolder}/build/TinGrizzly.exe"
+            "program": "${workspaceFolder}"
         }, {
             "name": "Launch",
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${workspaceFolder}/build/TinGrizzly.exe"
+            "program": "${workspaceFolder}"
         }
     ]
 }
