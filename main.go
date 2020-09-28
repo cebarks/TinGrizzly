@@ -1,14 +1,11 @@
 package main
 
 import (
-	"os"
 	"time"
-
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/gfx"
 	"github.com/cebarks/TinGrizzly/states"
+	"github.com/cebarks/TinGrizzly/util"
 
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -19,13 +16,17 @@ var (
 
 	//StateManager global instance
 	StateManager states.StateManager
+
 	//WindowManager global instance
 	WindowManager *gfx.WindowManager
 )
 
 func main() {
 	println("Launching...")
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
+	util.SetupLogging()
+
+	util.Running = true
 	pixelgl.Run(run)
 }
 
@@ -54,11 +55,10 @@ func run() {
 	StateManager = states.BuildStateManager()
 	WindowManager = &gfx.WindowManager{}
 
-	WindowManager.Initalize()
+	WindowManager.Initialize()
 	WindowManager.CreateWindow()
 
-	log.Print("Made it here!  =======================================")
-	for true {
+	for util.Running {
 		// gameLoop()
 
 		WindowManager.Update()
