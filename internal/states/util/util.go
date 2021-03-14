@@ -1,10 +1,8 @@
 package util
 
 import (
-	"os"
+	"log"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/snwfdhmp/errlog"
 )
 
@@ -17,20 +15,17 @@ var (
 //SetupLogging sets up errlog and zerolog and sets errlog to use zerolog to
 func SetupLogging() {
 	errorLogger = errlog.NewLogger(&errlog.Config{
-		PrintFunc:          log.Error().Msgf,
+		PrintFunc:          log.Printf,
 		LinesBefore:        6,
 		LinesAfter:         4,
 		PrintError:         true,
 		PrintSource:        true,
 		PrintStack:         false,
-		ExitOnDebugSuccess: true,
+		ExitOnDebugSuccess: false,
 	})
-
-	// zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 }
 
-// DebugError handles an error with errlog (& zerolog)
+// DebugError handles an error with errlog
 func DebugError(err error) bool {
 	return errorLogger.Debug(err)
 }

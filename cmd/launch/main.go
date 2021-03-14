@@ -1,9 +1,8 @@
-package main
+package launch
 
 import (
 	"time"
 
-	"github.com/cebarks/TinGrizzly/gfx"
 	"github.com/cebarks/TinGrizzly/states"
 	"github.com/cebarks/TinGrizzly/util"
 
