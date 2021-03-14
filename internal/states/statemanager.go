@@ -1,5 +1,7 @@
 package states
 
+import "log"
+
 // StateManager is reposible for holding information about the games current state and related information
 type StateManager struct {
 	ActiveState State
@@ -17,6 +19,14 @@ func (sm *StateManager) Initialize() {
 	// sm.stateMap["dungeon1"] = StateDungeon
 
 	sm.ActiveState = sm.stateMap["null"]
+}
+
+func (sm *StateManager) SetState(state string) {
+	sm.ActiveState = sm.stateMap[state]
+	
+	if sm.ActiveState == nil {
+		log.Fatalf("Couldn't set state: %s", state)
+	}
 }
 
 // BuildStateManager returns a new StateManager already initialized with default values.

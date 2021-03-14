@@ -1,5 +1,6 @@
-./build/
-./vscode/
-./idea/
-build/
+.task/
+bin/
+
+# executables
 TinGrizzly
+*.exe

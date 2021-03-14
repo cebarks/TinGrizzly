@@ -1,6 +1,51 @@
 version: '3'
 
+vars:
+  # EXE: bin/TinGrizzly{{exeExt}}
+  EXE: bin/TinGrizzly.exe
+  MAIN_CMD: ./cmd/TinGrizzly
+
 tasks:
-  build:
+  default:
     cmds:
-      - go build ./cmd/launch
+      - task -l
+    silent: true 
+
+  run:
+    desc: run the bot locally wih
+    deps: [build-windows]
+    cmds:
+      -  ./{{.EXE}}
+
+  test:
+    desc: run all tests
+    cmds:
+      - go test ./... -cover -covermode atomic
+
+  testv:
+    desc: run all tests verbosely
+    cmds:
+      - go test ./... -cover -covermode atomic -v
+
+  build-windows:
+    desc: build a windows executable to {{.EXE}}
+    cmds:
+      - CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -v -o {{.EXE}} {{.MAIN_CMD}} 
+    sources:
+      - ./**/*.go
+    generates:
+      - ./{{.EXE}}
+
+  todo:
+    desc: find all //TODO comments in the repo
+    cmds:
+      - grep -nr --exclude="Taskfile.yml" --exclude-dir=".git" "//TODO" . 
+    
+  # build:
+  #   desc: build executable to {{.EXE}}
+  #   cmds:
+  #     - go build -o {{.EXE}} {{.MAIN_CMD}} 
+  #   sources:
+  #     - ./**/*.go
+  #   generates:
+  #     - ./{{.EXE}}
