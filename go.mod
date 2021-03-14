@@ -1,6 +1,6 @@
 module github.com/cebarks/TinGrizzly
 
-go 1.15
+go 1.16
 
 require (
 	github.com/faiface/pixel v0.10.0
