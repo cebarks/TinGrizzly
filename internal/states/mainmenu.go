@@ -10,7 +10,7 @@ type StateMainMenu struct {
 	State
 }
 
-func (s StateMainMenu) Update(dt float64) {
+func (s StateMainMenu) Update(wm *StateContext, dt float64) {
 
 }
 
