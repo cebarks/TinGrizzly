@@ -1,7 +1,11 @@
 package gfx
 
 import (
+	"fmt"
 	"log"
+	"sort"
+	"strings"
+	"sync"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/faiface/pixel"
@@ -13,13 +17,18 @@ type WindowManager struct {
 }
 
 var (
-	title string = ""
+	title         string = "TinGrizzly"
+	subtitles            = make(map[string]interface{})
+	subtitleMutex        = &sync.Mutex{}
 )
 
 func BuildWindowManager() *WindowManager {
 	window, err := pixelgl.NewWindow(pixelgl.WindowConfig{
-		Title:  title,
-		Bounds: pixel.R(0, 0, 1920, 1080),
+		Title:     title,
+		Bounds:    pixel.R(0, 0, 1920, 1080),
+		VSync:     false,
+		Resizable: false,
+		// Monitor:   pixelgl.PrimaryMonitor(),
 	})
 
 	if util.DebugError(err) {
@@ -28,4 +37,25 @@ func BuildWindowManager() *WindowManager {
 
 	winm := WindowManager{Window: window}
 	return &winm
+}
+
+func (wm *WindowManager) SetSubtitle(key string, subtitle interface{}) {
+	subtitleMutex.Lock()
+	subtitles[key] = subtitle
+	subtitleMutex.Unlock()
+}
+
+func (wm *WindowManager) UpdateSubtitles() {
+	subtitleMutex.Lock()
+	var subs []string
+	for k, sub := range subtitles {
+		subs = append(subs, fmt.Sprintf("%s=%s", k, sub))
+	}
+
+	sort.Slice(subs, func(i, j int) bool { return subs[i] < subs[j] })
+
+	joined := strings.Join(subs, "|")
+
+	wm.SetTitle(fmt.Sprintf("%s - %s", title, joined))
+	subtitleMutex.Unlock()
 }
