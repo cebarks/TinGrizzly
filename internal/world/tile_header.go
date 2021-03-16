@@ -10,8 +10,8 @@ import (
 )
 
 type TileHeader struct {
-	Bitmask TileBitmask
 	_       byte
+	Bitmask TileBitmask
 	Index   uint32
 }
 

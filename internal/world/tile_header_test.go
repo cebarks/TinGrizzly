@@ -29,7 +29,7 @@ func Test_Save(t *testing.T) {
 	header.Save(grid, tile.At(2, 2))
 
 	actual, _ := grid.At(2, 2)
-	expected := tile.Tile{0x1, 0x0, 0xce, 0x7e, 0x6, 0x0}
+	expected := tile.Tile{0x0, 0x1, 0xce, 0x7e, 0x6, 0x0}
 
 	assert.Equal(t, expected, actual)
 }
@@ -42,7 +42,7 @@ func Test_FromTile(t *testing.T) {
 		Index:   425678,
 	}
 
-	rawHeader := tile.Tile{0x1, 0x0, 0xce, 0x7e, 0x6, 0x0}
+	rawHeader := tile.Tile{0x0, 0x1, 0xce, 0x7e, 0x6, 0x0}
 
 	grid.WriteAt(2, 2, rawHeader)
 
@@ -60,7 +60,7 @@ func Test_Load(t *testing.T) {
 		Index:   425678,
 	}
 
-	grid.WriteAt(2, 2, tile.Tile{0x1, 0x0, 0xce, 0x7e, 0x6, 0x0})
+	grid.WriteAt(2, 2, tile.Tile{0x0, 0x1, 0xce, 0x7e, 0x6, 0x0})
 
 	var header TileHeader
 	header.Load(grid, tile.At(2, 2))
