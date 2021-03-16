@@ -1,8 +1,9 @@
 package world
 
 import (
-	"log"
-
+	"github.com/cebarks/TinGrizzly/internal/util"
+	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/pixelgl"
 	"github.com/kelindar/tile"
 )
 
@@ -16,6 +17,26 @@ type TileData struct {
 type World struct {
 	Lookup map[uint32]*TileData
 	Grid   *tile.Grid
+	sprite *pixel.Sprite
+}
+
+func (w *World) Render(win *pixelgl.Window) {
+	w.Grid.Each(func(p tile.Point, t tile.Tile) {
+		td := w.TileDataLookupFromTile(t)
+
+		mat := pixel.IM
+		//mat = pixel.IM.Moved(win.Bounds().Center())
+		mat = pixel.IM.Moved(pixel.V(128, 128))
+
+		switch td.Type {
+		case TileTypeEmpty:
+			return
+		case TileTypeStone:
+			mat = mat.Moved(util.PointToVecScaled(p, 256))
+			mat = mat.Scaled(pixel.ZV, .1)
+			w.sprite.Draw(win, mat)
+		}
+	})
 }
 
 func NewWorld(sizeX, sizeY int16) *World {
@@ -27,6 +48,13 @@ func NewWorld(sizeX, sizeY int16) *World {
 	world.Grid.Each(func(p tile.Point, t tile.Tile) {
 		initTile(world, p)
 	})
+
+	pic, err := util.LoadPicture("assets/ball.png")
+	if err != nil {
+		panic(err)
+	}
+
+	world.sprite = pixel.NewSprite(pic, pic.Bounds())
 
 	return world
 }
@@ -42,7 +70,6 @@ func (w *World) TileDataLookupFromTile(t tile.Tile) *TileData {
 	var header TileHeader
 
 	header.FromTile(t)
-	log.Printf("header: %+v", header)
 
 	tileData := w.Lookup[header.Index]
 	tileData.Header = header

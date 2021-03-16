@@ -24,12 +24,8 @@ func (game *Game) Run() {
 	game.WindowManager = gfx.BuildWindowManager()
 
 	log.Println("Launched!")
-	go game.updateLoop()
-	game.renderLoop()
-
-	// for util.Running {
-	// 	time.Sleep(time.Second / time.Duration(targetUPS))
-	// }
+	go game.renderLoop()
+	game.updateLoop()
 
 	log.Println("Closing.")
 }

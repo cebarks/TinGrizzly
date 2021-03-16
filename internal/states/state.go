@@ -13,7 +13,7 @@ type StateManager struct {
 	stateMap    map[string]State
 }
 
-// State implements the base interface/struct for  any State
+// State implements the base interface/struct for any State
 type State interface {
 	Update(win *StateContext, dt float64)
 	Render(win *pixelgl.Window)
@@ -31,9 +31,9 @@ type StateContext struct {
 func (sm *StateManager) Initialize() {
 	// create map of state instances
 	sm.stateMap = map[string]State{
-		"null":     StateNull{},
-		"mainMenu": StateMainMenu{},
-		"dev":      StateDevelopment{},
+		"null":     &StateNull{},
+		"mainMenu": &StateMainMenu{},
+		"dev":      &StateDevelopment{},
 	}
 
 	// sm.SetState("null")

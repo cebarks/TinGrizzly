@@ -1,8 +1,13 @@
 package util
 
 import (
+	"image"
+	_ "image/png"
 	"log"
+	"os"
 
+	"github.com/faiface/pixel"
+	"github.com/kelindar/tile"
 	"github.com/snwfdhmp/errlog"
 )
 
@@ -32,4 +37,25 @@ func SetupLogging() {
 // DebugError handles an error with errlog
 func DebugError(err error) bool {
 	return errorLogger.Debug(err)
+}
+
+func LoadPicture(path string) (pixel.Picture, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return nil, err
+	}
+	return pixel.PictureDataFromImage(img), nil
+}
+
+func PointToVec(p tile.Point) pixel.Vec {
+	return pixel.V(float64(p.X), float64(p.Y))
+}
+
+func PointToVecScaled(p tile.Point, scale float64) pixel.Vec {
+	return pixel.V(float64(p.X)*scale, float64(p.Y)*scale)
 }
