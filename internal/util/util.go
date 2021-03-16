@@ -12,6 +12,10 @@ var (
 	errorLogger errlog.Logger
 )
 
+func init() {
+	SetupLogging()
+}
+
 //SetupLogging sets up errlog and zerolog and sets errlog to use zerolog to
 func SetupLogging() {
 	errorLogger = errlog.NewLogger(&errlog.Config{
@@ -20,7 +24,7 @@ func SetupLogging() {
 		LinesAfter:         4,
 		PrintError:         true,
 		PrintSource:        true,
-		PrintStack:         false,
+		PrintStack:         true,
 		ExitOnDebugSuccess: false,
 	})
 }

@@ -9,7 +9,7 @@ const (
 	TileTypeStone
 )
 
-type TileBitmask uint16
+type TileBitmask byte
 
 const (
 	FlagActive = 1 << iota
