@@ -28,7 +28,7 @@ type World struct {
 func (w *World) Render(win *pixelgl.Window) {
 	w.Canvas.Clear(colornames.Whitesmoke)
 
-	// w.tileBatch.Clear()
+	w.tileBatch.Clear()
 
 	w.Grid.Each(func(p tile.Point, t tile.Tile) {
 		td := w.TileDataLookupFromTile(t)
