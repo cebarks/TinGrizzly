@@ -34,7 +34,7 @@ func (sm *StateManager) SetState(state string) {
 	newState := sm.stateMap[state]
 
 	if newState == nil {
-		log.Fatal().Msgf("Couldn't set state: %s", state)
+		log.Panic().Msgf("State not registered. Couldn't set new state: %s", state)
 	}
 
 	log.Debug().Msgf("Switching states: %+v -> %+v", reflect.TypeOf(oldState), reflect.TypeOf(newState))
@@ -44,7 +44,7 @@ func (sm *StateManager) SetState(state string) {
 	}
 	sm.ActiveState = newState
 	newState.Start()
-	log.Fatal().Msgf("Switched states.")
+	log.Debug().Msgf("Switched states.")
 }
 
 // BuildStateManager returns a new StateManager already initialized with default values.
