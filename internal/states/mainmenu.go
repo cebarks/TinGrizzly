@@ -7,7 +7,6 @@ import (
 
 // StateMainMenu is the main menu
 type StateMainMenu struct {
-	State
 }
 
 func (s StateMainMenu) Update(wm *StateContext, dt float64) {

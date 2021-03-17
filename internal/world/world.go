@@ -1,10 +1,13 @@
 package world
 
 import (
+	"log"
+
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/kelindar/tile"
+	"golang.org/x/image/colornames"
 )
 
 type TileData struct {
@@ -15,28 +18,44 @@ type TileData struct {
 }
 
 type World struct {
-	Lookup map[uint32]*TileData
-	Grid   *tile.Grid
-	sprite *pixel.Sprite
+	Lookup     map[uint32]*TileData
+	Grid       *tile.Grid
+	ballSprite *pixel.Sprite
+	Canvas     *pixelgl.Canvas
+	tileBatch  *pixel.Batch
 }
 
 func (w *World) Render(win *pixelgl.Window) {
+	w.Canvas.Clear(colornames.Whitesmoke)
+
+	// w.tileBatch.Clear()
+
 	w.Grid.Each(func(p tile.Point, t tile.Tile) {
 		td := w.TileDataLookupFromTile(t)
 
 		mat := pixel.IM
-		//mat = pixel.IM.Moved(win.Bounds().Center())
 		mat = pixel.IM.Moved(pixel.V(128, 128))
 
+		var sprite *pixel.Sprite
+
 		switch td.Type {
-		case TileTypeEmpty:
-			return
+		default:
 		case TileTypeStone:
-			mat = mat.Moved(util.PointToVecScaled(p, 256))
-			mat = mat.Scaled(pixel.ZV, .1)
-			w.sprite.Draw(win, mat)
+			sprite = w.ballSprite
 		}
+
+		if sprite == nil {
+			return
+		}
+
+		mat = mat.Moved(util.PointToVecScaled(p, 256))
+		mat = mat.Scaled(pixel.ZV, .1)
+		sprite.Draw(w.tileBatch, mat) //draw each tile to a batch.Draw instead of individually
 	})
+
+	w.tileBatch.Draw(w.Canvas) //draw tiles to world canvas
+
+	w.Canvas.Draw(win, pixel.IM.Moved(win.Bounds().Center())) //draw the world canvas to the center of the window
 }
 
 func NewWorld(sizeX, sizeY int16) *World {
@@ -51,10 +70,12 @@ func NewWorld(sizeX, sizeY int16) *World {
 
 	pic, err := util.LoadPicture("assets/ball.png")
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 
-	world.sprite = pixel.NewSprite(pic, pic.Bounds())
+	world.ballSprite = pixel.NewSprite(pic, pic.Bounds())
+	world.tileBatch = pixel.NewBatch(&pixel.TrianglesData{}, pic)
+	world.Canvas = pixelgl.NewCanvas(pixel.R(1, 1, 1024, 1024))
 
 	return world
 }

@@ -20,8 +20,8 @@ type Game struct {
 }
 
 func (game *Game) Run() {
-	game.StateManager = states.BuildStateManager()
 	game.WindowManager = gfx.BuildWindowManager()
+	game.StateManager = states.BuildStateManager()
 
 	log.Println("Launched!")
 	go game.renderLoop()

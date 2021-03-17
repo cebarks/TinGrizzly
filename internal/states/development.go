@@ -9,7 +9,6 @@ import (
 
 // StateDevelopment is a testing state for any dev work
 type StateDevelopment struct {
-	State
 	w *world.World
 }
 
@@ -25,7 +24,7 @@ func (s *StateDevelopment) Render(win *pixelgl.Window) {
 }
 
 func (s *StateDevelopment) Start() {
-	s.w = world.NewWorld(18, 18)
+	s.w = world.NewWorld(39, 39)
 
 	s.w.Grid.Each(func(p tile.Point, t tile.Tile) {
 		if (p.X%2 == 0 && p.Y%2 == 0) || (p.X%2 == 1 && p.Y%2 == 1) {
@@ -34,16 +33,14 @@ func (s *StateDevelopment) Start() {
 		td := s.w.TileDataLookupFromTile(t)
 		td.Type = world.TileTypeStone
 	})
-
 }
 
 func (s StateDevelopment) Stop() {
-
+	s.w = nil
 }
 
 // StateNull is a testing state for any dev work
 type StateNull struct {
-	State
 }
 
 func (s StateNull) Update(wm *StateContext, dt float64) {

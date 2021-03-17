@@ -2,6 +2,7 @@ package states
 
 import (
 	"log"
+	"reflect"
 
 	"github.com/cebarks/TinGrizzly/internal/gfx"
 	"github.com/faiface/pixel/pixelgl"
@@ -18,26 +19,13 @@ type State interface {
 	Update(win *StateContext, dt float64)
 	Render(win *pixelgl.Window)
 	Start()
-	Pause()
 	Stop()
+	// Pause()
 }
 
 type StateContext struct {
 	StateManager  *StateManager
 	WindowManager *gfx.WindowManager
-}
-
-// Initialize all states
-func (sm *StateManager) Initialize() {
-	// create map of state instances
-	sm.stateMap = map[string]State{
-		"null":     &StateNull{},
-		"mainMenu": &StateMainMenu{},
-		"dev":      &StateDevelopment{},
-	}
-
-	// sm.SetState("null")
-	sm.SetState("dev")
 }
 
 func (sm *StateManager) SetState(state string) {
@@ -48,16 +36,28 @@ func (sm *StateManager) SetState(state string) {
 		log.Fatalf("Couldn't set state: %s", state)
 	}
 
+	log.Printf("Switching states: %+v -> %+v", reflect.TypeOf(oldState), reflect.TypeOf(newState))
+
 	if oldState != nil {
 		oldState.Stop()
 	}
 	sm.ActiveState = newState
 	newState.Start()
+	log.Println("Switched states.")
 }
 
 // BuildStateManager returns a new StateManager already initialized with default values.
 func BuildStateManager() *StateManager {
-	sm := StateManager{}
-	sm.Initialize()
+	sm := StateManager{
+		stateMap: map[string]State{
+			"null":     &StateNull{},
+			"mainMenu": &StateMainMenu{},
+			"dev":      &StateDevelopment{},
+		},
+	}
+
+	// sm.SetState("null")
+	sm.SetState("dev")
+
 	return &sm
 }
