@@ -2,7 +2,8 @@ package game
 
 import (
 	"fmt"
-	"log"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/gfx"
 	"github.com/cebarks/TinGrizzly/internal/states"
@@ -23,11 +24,11 @@ func (game *Game) Run() {
 	game.WindowManager = gfx.BuildWindowManager()
 	game.StateManager = states.BuildStateManager()
 
-	log.Println("Launched!")
+	log.Info().Msg("Launched!")
 	go game.renderLoop()
 	game.updateLoop()
 
-	log.Println("Closing.")
+	log.Info().Msg("Closing.")
 }
 
 func (game *Game) updateLoop() {

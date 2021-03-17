@@ -1,8 +1,9 @@
 package states
 
 import (
-	"log"
 	"reflect"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/gfx"
 	"github.com/faiface/pixel/pixelgl"
@@ -33,17 +34,17 @@ func (sm *StateManager) SetState(state string) {
 	newState := sm.stateMap[state]
 
 	if newState == nil {
-		log.Fatalf("Couldn't set state: %s", state)
+		log.Fatal().Msgf("Couldn't set state: %s", state)
 	}
 
-	log.Printf("Switching states: %+v -> %+v", reflect.TypeOf(oldState), reflect.TypeOf(newState))
+	log.Debug().Msgf("Switching states: %+v -> %+v", reflect.TypeOf(oldState), reflect.TypeOf(newState))
 
 	if oldState != nil {
 		oldState.Stop()
 	}
 	sm.ActiveState = newState
 	newState.Start()
-	log.Println("Switched states.")
+	log.Fatal().Msgf("Switched states.")
 }
 
 // BuildStateManager returns a new StateManager already initialized with default values.

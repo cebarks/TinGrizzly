@@ -2,10 +2,11 @@ package gfx
 
 import (
 	"fmt"
-	"log"
 	"sort"
 	"strings"
 	"sync"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/faiface/pixel"
@@ -32,7 +33,7 @@ func BuildWindowManager() *WindowManager {
 	})
 
 	if util.DebugError(err) {
-		log.Fatalf("Couldn't create window: %v", err)
+		log.Fatal().Msgf("Couldn't create window: %v", err)
 	}
 
 	winm := WindowManager{Window: window}

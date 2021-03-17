@@ -3,8 +3,9 @@ package util
 import (
 	"image"
 	_ "image/png"
-	"log"
 	"os"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/faiface/pixel"
 	"github.com/kelindar/tile"

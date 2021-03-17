@@ -3,7 +3,8 @@ package world
 import (
 	"bytes"
 	"encoding/binary"
-	"log"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/kelindar/tile"
@@ -28,7 +29,7 @@ type TileHeader struct {
 func (header *TileHeader) Save(grid *tile.Grid, p tile.Point) {
 	buf := new(bytes.Buffer)
 	if err := binary.Write(buf, binary.LittleEndian, header); util.DebugError(err) {
-		log.Fatal(err) //TODO log.Fatal call
+		log.Fatal().Err(err).Msg("Could not save header") //TODO log.Fatal call
 	}
 
 	var t tile.Tile
@@ -50,6 +51,6 @@ func (header *TileHeader) FromTile(t tile.Tile) {
 	}
 
 	if err := binary.Read(buf, binary.LittleEndian, header); util.DebugError(err) {
-		log.Fatal(err) //TODO log.Fatal call
+		log.Fatal().Err(err).Msg("Could not load header.") //TODO log.Fatal call
 	}
 }

@@ -1,7 +1,7 @@
 package world
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/faiface/pixel"
@@ -70,7 +70,7 @@ func NewWorld(sizeX, sizeY int16) *World {
 
 	pic, err := util.LoadPicture("assets/ball.png")
 	if err != nil {
-		log.Panic(err)
+		log.Fatal().Err(err).Msg("Couldn't load asset: assets/ball.png")
 	}
 
 	world.ballSprite = pixel.NewSprite(pic, pic.Bounds())

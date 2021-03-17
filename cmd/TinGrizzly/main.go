@@ -1,10 +1,11 @@
 package main
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/game"
 	"github.com/cebarks/TinGrizzly/internal/util"
@@ -13,7 +14,7 @@ import (
 )
 
 func main() {
-	log.Println("Launching...")
+	log.Info().Msg("Launching...")
 	util.SetupLogging()
 	gam := &game.Game{}
 
@@ -31,7 +32,7 @@ func SetupCloseHandler() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		log.Println("SIGINT Received")
+		log.Info().Msg("SIGTERM Received.")
 		util.Running = false
 	}()
 }
