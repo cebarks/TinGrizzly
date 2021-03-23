@@ -1,19 +1,29 @@
 version: '3'
 
 vars:
-  # EXE: bin/TinGrizzly{{exeExt}}
-  EXE: bin/TinGrizzly.exe
+  WSL:
+    sh: |
+        if [ `uname -s` = "Linux" ]; then
+          if grep -q "microsoft" <<<`uname -r`; then
+            echo true
+          else
+            echo false
+          fi
+        else
+          echo false
+        fi
+  EXE: bin/TinGrizzly{{if eq .WSL "true"}}.exe{{else}}{{exeExt}}{{end}}
   MAIN_CMD: ./cmd/TinGrizzly
 
 tasks:
   default:
     cmds:
       - task -l
-    silent: true 
+    silent: true
 
   run:
-    desc: run the bot locally wih
-    deps: [build-windows]
+    desc: run the game
+    deps: [build]
     cmds:
       -  ./{{.EXE}}
 
@@ -27,25 +37,24 @@ tasks:
     cmds:
       - go test ./... -cover -covermode atomic -v
 
-  build-windows:
-    desc: build a windows executable to {{.EXE}}
-    cmds:
-      - CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -v -o {{.EXE}} {{.MAIN_CMD}} 
-    sources:
-      - ./**/*.go
-    generates:
-      - ./{{.EXE}}
-
   todo:
     desc: find all //TODO comments in the repo
     cmds:
       - grep -nr --exclude="Taskfile.yml" --exclude-dir=".git" "//TODO" . 
     
-  # build:
-  #   desc: build executable to {{.EXE}}
-  #   cmds:
-  #     - go build -o {{.EXE}} {{.MAIN_CMD}} 
-  #   sources:
-  #     - ./**/*.go
-  #   generates:
-  #     - ./{{.EXE}}
+  build:
+    desc: build executable to {{.EXE}}
+    cmds:
+      - task: build-{{ if (and (eq OS "windows") (eq .WSL "true")) }}wsl{{else}}all{{end}}
+    sources:
+      - ./**/*.go
+    generates:
+      - ./{{.EXE}}
+
+  build-all:
+    cmds:
+      - CGO_ENALBED=1 go build -v -o {{.EXE}} {{.MAIN_CMD}}
+
+  build-wsl:
+    cmds:
+      - CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH={{ARCH}} CGO_ENABLED=1 go build -v -o {{.EXE}} {{.MAIN_CMD}} 
