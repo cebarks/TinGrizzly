@@ -18,11 +18,13 @@ var targetUPS int64 = 50
 type Game struct {
 	StateManager  *states.StateManager
 	WindowManager *gfx.WindowManager
+	debugMenu     *map[string]interface{}
 }
 
 func (game *Game) Run() {
 	game.WindowManager = gfx.BuildWindowManager()
 	game.StateManager = states.BuildStateManager()
+	game.debugMenu = &map[string]interface{}{}
 
 	log.Info().Msg("Launched!")
 	go game.renderLoop()

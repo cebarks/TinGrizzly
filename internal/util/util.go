@@ -21,16 +21,20 @@ var (
 	errorLogger errlog.Logger
 	// DebugError handles an error with errlog
 	DebugError func(error) bool
+
+	GitCommit string
 )
 
-func init() {
+func Startup() {
 	SetupLogging()
+	log.Info().Str("version", GitCommit).Msg("Launching...")
 	ReloadCfgFromDisk()
+	Running = true
 }
 
 //SetupLogging sets up errlog and zerolog and sets errlog to use zerolog to
 func SetupLogging() {
-	//set pretty console output for zerolog
+	// set pretty console output for zerolog
 	log.Logger = log.Output(zerolog.ConsoleWriter{
 		Out:        os.Stdout,
 		TimeFormat: time.RFC1123Z,
