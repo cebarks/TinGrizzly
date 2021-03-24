@@ -35,7 +35,7 @@ tasks:
     cmds:
       - rm -rv log
     preconditions:
-      - test -d directory
+      - test -d log
 
   test:
     desc: run all tests

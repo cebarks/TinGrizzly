@@ -15,6 +15,9 @@ var (
 	// Running - global variable for app state
 	Running   bool
 	GitCommit string
+
+	TargetFPS int64 = 144
+	TargetUPS int64 = 50
 )
 
 func Startup() {

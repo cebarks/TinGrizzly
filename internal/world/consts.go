@@ -22,3 +22,12 @@ func (f TileBitmask) HasFlag(flag TileBitmask) bool { return f&flag != 0 }
 
 // RemoveFlag removes a flag from the bitmask
 func (f *TileBitmask) RemoveFlag(flag TileBitmask) { *f &^= flag }
+
+func newTileStateForType(typ TileType) TileState {
+	switch typ {
+	case TileTypeStone:
+		return &TileStateStone{}
+	default:
+		return &TileStateEmpty{}
+	}
+}

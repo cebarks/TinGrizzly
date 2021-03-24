@@ -1,6 +1,8 @@
 package world
 
 import (
+	"sync"
+
 	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
@@ -13,7 +15,7 @@ import (
 type TileData struct {
 	Type     TileType
 	Location tile.Point
-	State    *TileState
+	State    TileState
 	Header   TileHeader
 }
 
@@ -58,6 +60,41 @@ func (w *World) Render(win *pixelgl.Window) {
 	w.Canvas.Draw(win, pixel.IM.Moved(win.Bounds().Center())) //draw the world canvas to the center of the window
 }
 
+type tileUpdate struct {
+	w     *World
+	td    *TileData
+	delta float64
+	p     tile.Point
+}
+
+func (w *World) Update(delta float64) {
+	var wg sync.WaitGroup
+	var work []tileUpdate
+
+	w.Grid.Each(func(p tile.Point, t tile.Tile) {
+		td := w.TileDataLookupFromTile(t)
+
+		if td.Header.Bitmask.HasFlag(FlagActive) {
+			work = append(work, tileUpdate{
+				delta: delta,
+				w:     w,
+				p:     p,
+				td:    td,
+			})
+			wg.Add(1)
+		}
+	})
+
+	for _, work := range work {
+		go func(tu tileUpdate) {
+			tu.td.State.Update(tu.w, tu.p, tu.delta)
+			defer wg.Done()
+		}(work)
+	}
+
+	wg.Wait()
+}
+
 func NewWorld(sizeX, sizeY int16) *World {
 	world := &World{
 		Lookup: make(map[uint32]*TileData, sizeX*sizeY),
@@ -80,10 +117,15 @@ func NewWorld(sizeX, sizeY int16) *World {
 	return world
 }
 
-//TileDataLookupFromTile returns the TileData associated with the coordinates
+//TileDataLookup returns the TileData associated with the coordinates
 func (w *World) TileDataLookup(x, y int16) *TileData {
 	t, _ := w.Grid.At(x, y)
 	return w.TileDataLookupFromTile(t)
+}
+
+//TileDataLookupFromPoint returns the TileData associated with the coordinates
+func (w *World) TileDataLookupFromPoint(p tile.Point) *TileData {
+	return w.TileDataLookup(p.X, p.Y)
 }
 
 //TileDataLookupFromTile returns the TileData associated with the given tile
@@ -107,16 +149,26 @@ func (td TileData) Index() uint32 {
 func initTile(world *World, p tile.Point) {
 	tileData := TileData{
 		Type:     TileTypeEmpty,
-		State:    &TileState{},
 		Location: p,
 	}
 
+	tileData.State = &TileStateEmpty{}
+
 	header := &TileHeader{
-		Bitmask: FlagActive,
-		Index:   tileData.Index(),
+		Index: tileData.Index(),
 	}
+
+	header.Bitmask.AddFlag(FlagActive)
 
 	header.Save(world.Grid, p)
 
 	world.Lookup[tileData.Index()] = &tileData
+}
+
+func (w *World) SetTileTo(p tile.Point, typ TileType) *TileData {
+	td := w.TileDataLookup(p.X, p.Y)
+
+	td.Type = typ
+	td.State = newTileStateForType(typ)
+	return td
 }

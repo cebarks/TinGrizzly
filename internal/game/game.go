@@ -12,9 +12,6 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-var targetFPS int64 = 144
-var targetUPS int64 = 50
-
 type Game struct {
 	StateManager  *states.StateManager
 	WindowManager *gfx.WindowManager
@@ -34,7 +31,7 @@ func (game *Game) Run() {
 }
 
 func (game *Game) updateLoop() {
-	ticker := pixelutils.NewTickerV(targetUPS, targetUPS*60)
+	ticker := pixelutils.NewTickerV(util.TargetUPS, util.TargetUPS*60)
 
 	for util.Running {
 		if game.WindowManager.Pressed(pixelgl.KeyEscape) || game.WindowManager.Closed() {
@@ -58,7 +55,7 @@ func (game *Game) updateLoop() {
 }
 
 func (game *Game) renderLoop() {
-	ticker := pixelutils.NewTickerV(targetFPS, targetFPS*60)
+	ticker := pixelutils.NewTickerV(util.TargetFPS, util.TargetFPS*60)
 
 	for util.Running {
 		_, fps := ticker.Tick()

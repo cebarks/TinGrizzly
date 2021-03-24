@@ -1,7 +1,6 @@
 package util
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -47,15 +46,16 @@ func SetupLogging() {
 		log.Info().Msgf("Saving log file to: %s", path)
 	}
 
-	fileWriter := bufio.NewWriter(logFile)
+	// fileWriter := bufio.NewWriter(logFile)
+	fileWriter := zerolog.New(logFile).With().Logger()
 
-	go func() {
-		defer fileWriter.Flush()
-		for {
-			fileWriter.Flush()
-			time.Sleep(25 * time.Millisecond)
-		}
-	}()
+	// go func() {
+	// 	defer fileWriter.Flush()
+	// 	for {
+	// 		fileWriter.Flush()
+	// 		time.Sleep(25 * time.Millisecond)
+	// 	}
+	// }()
 
 	log.Logger = log.Output(zerolog.MultiLevelWriter(consoleWriter, fileWriter))
 

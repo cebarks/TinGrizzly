@@ -16,6 +16,7 @@ func (s StateDevelopment) Update(wm *StateContext, dt float64) {
 	if wm.WindowManager.Pressed(pixelgl.Key1) {
 		wm.StateManager.SetState("null")
 	}
+	s.w.Update(dt)
 }
 
 func (s *StateDevelopment) Render(win *pixelgl.Window) {
@@ -30,9 +31,17 @@ func (s *StateDevelopment) Start() {
 		if (p.X%2 == 0 && p.Y%2 == 0) || (p.X%2 == 1 && p.Y%2 == 1) {
 			return
 		}
-		td := s.w.TileDataLookupFromTile(t)
-		td.Type = world.TileTypeStone
+		s.w.SetTileTo(p, world.TileTypeStone)
 	})
+
+	var i int16
+	var j int16
+	for i = 0; i < 13; i++ {
+		for j = 0; j < 13; j++ {
+			td := s.w.TileDataLookup(i, j)
+			td.Header.Bitmask.RemoveFlag(world.FlagActive)
+		}
+	}
 }
 
 func (s StateDevelopment) Stop() {
