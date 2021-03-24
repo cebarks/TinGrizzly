@@ -1,5 +1,7 @@
 .task/
 bin/
+log/
 
 # executables
 *.exe
+TinGrizzly

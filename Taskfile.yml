@@ -30,6 +30,13 @@ tasks:
     cmds:
       -  ./{{.EXE}}
 
+  clean:
+    desc: clean any log files
+    cmds:
+      - rm -rv log
+    preconditions:
+      - test -d directory
+
   test:
     desc: run all tests
     cmds:
