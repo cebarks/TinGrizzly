@@ -1,2 +1,6 @@
 [core]
 log-level="trace"
+
+[performance]
+ups=50
+fps=144

@@ -63,7 +63,7 @@ tasks:
 
   build-all:
     cmds:
-      - CGO_ENALBED=1 
+      - CGO_ENABLED=1 {{.BUILD_CMD}}
 
   build-wsl:
     cmds:

@@ -1,5 +1,0 @@
-package asset
-
-func init() {
-
-}
