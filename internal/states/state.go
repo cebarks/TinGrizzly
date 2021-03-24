@@ -21,7 +21,6 @@ type State interface {
 	Render(win *pixelgl.Window)
 	Start()
 	Stop()
-	// Pause()
 }
 
 type StateContext struct {
@@ -57,7 +56,6 @@ func BuildStateManager() *StateManager {
 		},
 	}
 
-	// sm.SetState("null")
 	sm.SetState("dev")
 
 	return &sm

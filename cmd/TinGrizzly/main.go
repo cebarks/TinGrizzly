@@ -19,9 +19,8 @@ func main() {
 	gam := &game.Game{}
 
 	util.Running = true
-	// SetupCloseHandler()
+	SetupCloseHandler()
 	pixelgl.Run(gam.Run)
-
 }
 
 // SetupCloseHandler creates a 'listener' on a new goroutine which will notify the

@@ -16,13 +16,16 @@ import (
 
 var (
 	// Running - global variable for app state
-	Running     bool
+	Running bool
+
 	errorLogger errlog.Logger
+	// DebugError handles an error with errlog
+	DebugError func(error) bool
 )
 
 func init() {
-	zerolog.SetGlobalLevel(zerolog.TraceLevel)
 	SetupLogging()
+	ReloadCfgFromDisk()
 }
 
 //SetupLogging sets up errlog and zerolog and sets errlog to use zerolog to
@@ -31,30 +34,28 @@ func SetupLogging() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{
 		Out:        os.Stdout,
 		TimeFormat: time.RFC1123Z,
-		// FormatCaller: func(i interface{}) string {
-		// 	return fmt.Sprintf("%+v", i)
-		// },
 	})
-	if zerolog.GlobalLevel() <= zerolog.TraceLevel {
-		//adds file and line number to log
-		log.Logger = log.With().Caller().Logger()
-	} else {
-		errlog.DefaultLogger.Disable(true)
-	}
+
 	errorLogger = errlog.NewLogger(&errlog.Config{
-		PrintFunc:          log.Error().Msgf, //TODO: create wrapper function to cleanly print debug errors in log.
-		LinesBefore:        4,
+		LinesBefore:        3,
 		LinesAfter:         4,
 		PrintError:         true,
 		PrintSource:        true,
 		PrintStack:         true,
 		ExitOnDebugSuccess: false,
+		PrintFunc: func(format string, data ...interface{}) {
+			log.Error().Msgf(format, data...)
+		},
 	})
-}
 
-// DebugError handles an error with errlog
-func DebugError(err error) bool {
-	return errorLogger.Debug(err)
+	if zerolog.GlobalLevel() <= zerolog.TraceLevel {
+		//adds file and line number to log
+		log.Logger = log.With().Caller().Logger()
+	} else {
+		errorLogger.Disable(true)
+	}
+
+	DebugError = errorLogger.Debug
 }
 
 func LoadPicture(path string) (pixel.Picture, error) {
