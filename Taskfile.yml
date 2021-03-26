@@ -32,19 +32,19 @@ tasks:
       -  ./{{.EXE}}
 
   clean:
-    desc: clean any log files
+    desc: clean any log and build files
     cmds:
-      - rm -rv log
+      - rm -rv log/ bin/
     preconditions:
-      - test -d log
+      - test -d log || test -d bin
 
   test:
     desc: run all tests
     cmds:
-      - go test ./... -cover -covermode atomic
+      - go test ./...
 
   testv:
-    desc: run all tests verbosely
+    desc: run all tests verbosely (with coverage)
     cmds:
       - go test ./... -cover -covermode atomic -v
 
