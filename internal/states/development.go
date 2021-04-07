@@ -1,9 +1,6 @@
 package states
 
 import (
-	"fmt"
-
-	"github.com/cebarks/TinGrizzly/internal/util/asset"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
@@ -22,12 +19,6 @@ func (s StateDevelopment) Update(sc *StateContext, dt float64) {
 
 func (s *StateDevelopment) Render(win *pixelgl.Window) {
 	win.Clear(colornames.Aqua)
-	mat := pixel.IM.Moved(pixel.V(100, 100))
-	for i := 0; i < 12; i++ {
-		for j := 0; j < 43; j++ {
-			asset.Sprites[fmt.Sprintf("%v:%v", i, j)].Draw(win, mat.Moved(pixel.V(float64(i)*16, float64(j)*16)))
-		}
-	}
 }
 
 func (s *StateDevelopment) Start() {

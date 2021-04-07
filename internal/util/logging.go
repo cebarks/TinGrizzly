@@ -20,7 +20,7 @@ var (
 
 //SetupLogging sets up errlog and zerolog and sets errlog to use zerolog to
 func SetupLogging() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC1123Z}) //basic logger until real logging is set up
 
 	consoleWriter := zerolog.ConsoleWriter{
 		Out:        os.Stdout,
@@ -37,7 +37,7 @@ func SetupLogging() {
 	wd, _ := os.Getwd()
 	path := filepath.Join(wd, "log", fmt.Sprintf("log-%s.json", strings.ReplaceAll(time.Now().Format(time.Stamp), " ", "-")))
 
-	os.Mkdir("log", 0755)
+	os.Mkdir(filepath.Join(wd, "log"), 0755)
 
 	logFile, err := os.Create(path)
 	if err != nil {
@@ -46,16 +46,7 @@ func SetupLogging() {
 		log.Info().Msgf("Saving log file to: %s", path)
 	}
 
-	// fileWriter := bufio.NewWriter(logFile)
 	fileWriter := zerolog.New(logFile).With().Logger()
-
-	// go func() {
-	// 	defer fileWriter.Flush()
-	// 	for {
-	// 		fileWriter.Flush()
-	// 		time.Sleep(25 * time.Millisecond)
-	// 	}
-	// }()
 
 	log.Logger = log.Output(zerolog.MultiLevelWriter(consoleWriter, fileWriter))
 

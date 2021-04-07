@@ -1,6 +1,7 @@
 .task/
 bin/
 log/
+wiki/
 
 # executables
 *.exe

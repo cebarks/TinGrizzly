@@ -5,6 +5,7 @@ import (
 	_ "image/png"
 	"os"
 
+	"github.com/cebarks/TinGrizzly/resources"
 	"github.com/rs/zerolog/log"
 
 	"github.com/faiface/pixel"
@@ -25,6 +26,7 @@ func Startup() {
 	log.Info().Str("version", GitCommit).Msg("Launching...")
 	ReloadCfgFromDisk()
 	Running = true
+	resources.Setup()
 }
 
 func LoadPicture(path string) (pixel.Picture, error) {
