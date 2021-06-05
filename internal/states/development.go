@@ -1,14 +1,12 @@
 package states
 
 import (
-	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
 )
 
 // StateDevelopment is a testing state for any dev work
 type StateDevelopment struct {
-	batch *pixel.Batch
 }
 
 func (s StateDevelopment) Update(sc *StateContext, dt float64) {

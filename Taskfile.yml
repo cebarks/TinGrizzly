@@ -13,11 +13,16 @@ vars:
         else
           echo false
         fi
-  EXE: bin/TinGrizzly{{if eq .WSL "true"}}.exe{{else}}{{exeExt}}{{end}}
-  MAIN_CMD: ./cmd/TinGrizzly
   GIT_COMMIT:
     sh: git log -n 1 --format=%h
+  EXE: bin/grizz{{if eq .WSL "true"}}.exe{{else}}{{exeExt}}{{end}}
+  MAIN_CMD: ./cmd/TinGrizzly
+
   BUILD_CMD: go build -v -ldflags "-X github.com/cebarks/TinGrizzly/internal/util.GitCommit={{.GIT_COMMIT}}" -o {{.EXE}} {{.MAIN_CMD}}
+
+  CFG_EXE: bin/cfgutil{{if eq .WSL "true"}}.exe{{else}}{{exeExt}}{{end}}
+  CFG_CMD: ./cmd/cfgutil
+  CFG_BUILD_CMD: build -v -ldflags "-X github.com/cebarks/TinGrizzly/internal/util.GitCommit={{.GIT_COMMIT}}" -o {{.CFG_EXE}} {{.CFG_CMD}}
 
 tasks:
   default:
@@ -31,10 +36,20 @@ tasks:
     cmds:
       -  ./{{.EXE}}
 
+  gen-config:
+    desc: generate a default config
+    deps: [build-cfgutil]
+    cmds:
+      - ./{{.CFG_EXE}}
+    sources:
+      - ./internal/util/cfg.go
+    generates:
+      - config.toml.example
+
   clean:
     desc: clean any log and build files
     cmds:
-      - rm -rv log/ bin/
+      - rm -rv log/ bin/ config.toml.example
     preconditions:
       - test -d log || test -d bin
 
@@ -61,6 +76,16 @@ tasks:
       - ./**/*.go
     generates:
       - ./{{.EXE}}
+  
+  build-cfgutil:
+    desc: builds the cfgutil binary
+    cmds:
+      - go {{.CFG_BUILD_CMD}}
+    sources:
+      - ./cmd/cfgutil/**/*.go
+      - ./internal/util/cfg.go
+    generates:
+      - ./{{.CFG_EXE}}
 
   build-all:
     cmds:
@@ -69,3 +94,12 @@ tasks:
   build-wsl:
     cmds:
       - CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH={{ARCH}} CGO_ENABLED=1 {{.BUILD_CMD}}
+
+  stats:
+    desc: prints some stats about the project
+    silent: true
+    cmds:
+      - echo "Commits:$(git log --oneline | wc -l)"
+      - echo "Go Source files:$(find . -type f -name "*.go" | wc -l)"
+      - echo "Lines of Go Source:$(cat `find . -type f -name "*.go"` | wc -l)"
+      - echo "Packages:$(go list ./... | wc -l)"

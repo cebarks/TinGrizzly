@@ -3,6 +3,4 @@ bin/
 log/
 wiki/
 
-# executables
-*.exe
-TinGrizzly
+config.toml

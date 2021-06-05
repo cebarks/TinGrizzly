@@ -6,6 +6,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
+	"github.com/cebarks/TinGrizzly/internal/world/ecs"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/kelindar/tile"
@@ -25,6 +26,8 @@ type World struct {
 	ballSprite *pixel.Sprite
 	Canvas     *pixelgl.Canvas
 	tileBatch  *pixel.Batch
+
+	Manager ecs.Manager
 }
 
 func (w *World) Render(win *pixelgl.Window) {
@@ -85,14 +88,14 @@ func (w *World) Update(delta float64) {
 		}
 	})
 
-	for _, work := range work {
-		go func(tu tileUpdate) {
-			tu.td.State.Update(tu.w, tu.p, tu.delta)
-			defer wg.Done()
-		}(work)
-	}
-
-	wg.Wait()
+	//TODO reimplement updates with systems
+	// for _, work := range work {
+	// 	go func(tu tileUpdate) {
+	// 		tu.td.State.Update(tu.w, tu.p, tu.delta)
+	// 		defer wg.Done()
+	// 	}(work)
+	// }
+	// wg.Wait()
 }
 
 func NewWorld(sizeX, sizeY int16) *World {
@@ -141,7 +144,7 @@ func (w *World) TileDataLookupFromTile(t tile.Tile) *TileData {
 }
 
 //Index returns the key used for (*world.World).Lookup
-func (td TileData) Index() uint32 {
+func (td *TileData) Index() uint32 {
 	return td.Location.Integer()
 }
 
@@ -151,8 +154,6 @@ func initTile(world *World, p tile.Point) {
 		Type:     TileTypeEmpty,
 		Location: p,
 	}
-
-	tileData.State = &TileStateEmpty{}
 
 	header := &TileHeader{
 		Index: tileData.Index(),
@@ -169,6 +170,6 @@ func (w *World) SetTileTo(p tile.Point, typ TileType) *TileData {
 	td := w.TileDataLookup(p.X, p.Y)
 
 	td.Type = typ
-	td.State = newTileStateForType(typ)
+
 	return td
 }

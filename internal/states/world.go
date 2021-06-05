@@ -36,11 +36,10 @@ func (s *StateWorld) Start() {
 	for i = 0; i < 13; i++ {
 		for j = 0; j < 13; j++ {
 			td := s.w.TileDataLookup(i, j)
-			td.Header.Bitmask.RemoveFlag(world.FlagActive)
+			td.Header.Bitmask.ClearFlag(world.FlagActive)
 		}
 	}
 }
 
 func (s StateWorld) Stop() {
-	s.w = nil
 }

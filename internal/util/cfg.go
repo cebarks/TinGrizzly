@@ -13,7 +13,14 @@ import (
 
 type Config struct {
 	Core struct {
-		LogLevel string `toml:"log-level"`
+		LogLevel string `toml:"LogLevel" default:"info"`
+
+		Tunables struct {
+			Ups int `toml:"UpdatesPerSecondTarget" default:"60"`
+			Fps int `toml:"FramesPerSecondTarget" default:"60"`
+
+			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"5000"`
+		} `toml:"tunables" comment:"low level tuning engine settings"`
 	} `toml:"core" comment:"Core Engine settings"`
 }
 
