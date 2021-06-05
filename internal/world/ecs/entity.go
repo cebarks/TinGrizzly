@@ -1,11 +1,14 @@
 package ecs
 
-import "github.com/dusk125/pixelutils"
+import (
+	"github.com/dusk125/pixelutils"
+	"github.com/lrita/cmap"
+)
 
 type Entity struct {
-	Id int
-
 	Components []Component
+	Id         int
+	State      *cmap.Cmap
 }
 
 var idGen *pixelutils.IDGen = pixelutils.NewIDGen()

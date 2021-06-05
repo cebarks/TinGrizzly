@@ -20,7 +20,7 @@ type Config struct {
 			Fps int `toml:"FramesPerSecondTarget" default:"60"`
 
 			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"5000"`
-		} `toml:"tunables" comment:"low level tuning engine settings"`
+		} `toml:"tunables" comment:"low level engine settings"`
 	} `toml:"core" comment:"Core Engine settings"`
 }
 
@@ -43,23 +43,8 @@ func ReloadCfgFromDisk() {
 func ReadConfig() *Config {
 	config := &Config{}
 	pwd, _ := os.Getwd()
-	// configFile := "config.toml"
-	// configFile := pwd + "\\config.toml"
+
 	configFile := path.Join(pwd, "config.toml")
-
-	// if !util.FileExists(configFile) {
-	// 	config.configDir = ""
-
-	// 	var bytes bytes.Buffer
-	// 	err := toml.NewEncoder(&bytes).Order(toml.OrderPreserve).Encode(config)
-
-	// 	if err != nil {
-	// 		log.Panic().Err(err).Msg("Unable to save sample config file.")
-	// 	}
-
-	// 	ioutil.WriteFile(configFile, bytes.Bytes(), 0644)
-	// 	log.Fatal().Msgf("Config file doesn't exist. An example has been saved in its place.")
-	// }
 
 	// Read config from the file
 	bytes, err := ioutil.ReadFile(configFile)
