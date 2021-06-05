@@ -12,7 +12,14 @@ func main() {
 
 	toml.Unmarshal([]byte{}, &cfg)
 
-	bytes, _ := toml.Marshal(&cfg)
+	file, _ := os.OpenFile("config.toml.example", os.O_CREATE|os.O_WRONLY, 0644)
+	defer file.Close()
 
-	os.WriteFile("config.toml.example", bytes, 0644)
+	enc := toml.NewEncoder(file).Order(toml.OrderPreserve)
+
+	err := enc.Encode(&cfg)
+	if err != nil {
+		panic(err)
+	}
+	file.Sync()
 }

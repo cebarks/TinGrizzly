@@ -1,0 +1,10 @@
+
+# Core Engine settings
+[core]
+  LogLevel = "info"
+
+  # low level tuning engine settings
+  [core.tunables]
+    UpdatesPerSecondTarget = 60
+    FramesPerSecondTarget = 60
+    MaxWorldPoolWorkers = 5000

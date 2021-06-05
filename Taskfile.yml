@@ -99,7 +99,8 @@ tasks:
     desc: prints some stats about the project
     silent: true
     cmds:
-      - echo "Commits:$(git log --oneline | wc -l)"
+      - echo "Commits:$(git rev-list --count master)"
       - echo "Go Source files:$(find . -type f -name "*.go" | wc -l)"
       - echo "Lines of Go Source:$(cat `find . -type f -name "*.go"` | wc -l)"
       - echo "Packages:$(go list ./... | wc -l)"
+      - echo "Active TODOs:$(task -s todo | wc -l)"
