@@ -4,11 +4,8 @@ import (
 	"sync"
 
 	"github.com/lrita/cmap"
-	"github.com/rs/zerolog/log"
 
-	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/cebarks/TinGrizzly/internal/world/ecs"
-	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/kelindar/tile"
 )
@@ -79,11 +76,11 @@ func (w *World) Update(delta float64) {
 			wg.Add(1)
 		}
 	})
-	
+
 	wg.Wait()
 }
 
-func NewWorld(sizeX, sizeY int16) *World {
+func BuildWorld(sizeX, sizeY int16) *World {
 	world := &World{
 		Lookup: make(map[uint32]*TileData, sizeX*sizeY),
 		Grid:   tile.NewGrid(sizeX, sizeY),
@@ -92,14 +89,6 @@ func NewWorld(sizeX, sizeY int16) *World {
 	world.Grid.Each(func(p tile.Point, t tile.Tile) {
 		initTile(world, p)
 	})
-
-	pic, err := util.LoadPicture("assets/ball.png")
-	if err != nil {
-		log.Fatal().Err(err).Msg("Couldn't load asset: assets/ball.png")
-	}
-
-	world.tileBatch = pixel.NewBatch(&pixel.TrianglesData{}, pic)
-	world.Canvas = pixelgl.NewCanvas(pixel.R(1, 1, 1024, 1024))
 
 	return world
 }

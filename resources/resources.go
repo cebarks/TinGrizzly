@@ -14,16 +14,15 @@ import (
 //go:embed *
 var resourceEmbed embed.FS
 
-var Tiles spriteplus.SpriteSheet
+var sheet *spriteplus.SpriteSheet
 
 func Setup() {
 	tilesFile, _ := resourceEmbed.Open("assets/tiles.png")
 
-	var err error
-	Tiles, err = spriteplus.MakeCachedSheetFromPicture(12, 42, 16, 16, loadPictureFromReader(tilesFile))
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Couldn't load spritesheet: tiles.png")
-	}
+	// var err error
+	sheet := spriteplus.NewSpriteSheet(true)
+
+	sheet.
 }
 
 func GetResource(path string) fs.File {

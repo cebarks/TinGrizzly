@@ -1,6 +1,7 @@
 # Todo
 
-//TODO Entity-Component Framework
+//TODO Entity-Component-System Framework
+  //TODO - write tests for ecs framework
 //TODO MsgPack/nano networking for multiplayer?
 //TODO allow (re/over)loading of resources from filesystem instead of embeded source
 
