@@ -49,3 +49,18 @@ func PointToVec(p tile.Point) pixel.Vec {
 func PointToVecScaled(p tile.Point, scale float64) pixel.Vec {
 	return pixel.V(float64(p.X)*scale, float64(p.Y)*scale)
 }
+
+//FileExists returns true if the given path exists and isn't a directory
+func FileExists(filename string) bool {
+	s, err := os.Stat(filename)
+
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+		log.Error().Err(err).Msgf("helpers.FileExists(%s) errored out:", err) // If the err wasn't expected, something really went wrong
+	} else if s == nil { // If no s is returned there is a different issue.
+		return false
+	}
+	return !s.IsDir()
+}
