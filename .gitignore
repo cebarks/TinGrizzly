@@ -2,5 +2,6 @@
 bin/
 log/
 wiki/
+vendor/
 
 config.toml

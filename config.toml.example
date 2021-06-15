@@ -3,8 +3,14 @@
 [core]
   LogLevel = "info"
 
-  # low level tuning engine settings
+  # low level engine settings
   [core.tunables]
     UpdatesPerSecondTarget = 60
     FramesPerSecondTarget = 60
-    MaxWorldPoolWorkers = 5000
+    MaxWorldPoolWorkers = 100
+
+  # resource related settings
+  [core.resources]
+
+    # Whether or not resources should be loaded from the filesystem or the binary
+    embedded = false

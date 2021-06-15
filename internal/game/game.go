@@ -8,7 +8,7 @@ import (
 	"github.com/cebarks/TinGrizzly/internal/gfx"
 	"github.com/cebarks/TinGrizzly/internal/states"
 	"github.com/cebarks/TinGrizzly/internal/util"
-	_ "github.com/cebarks/TinGrizzly/resources"
+	"github.com/cebarks/TinGrizzly/resources"
 	"github.com/dusk125/pixelutils"
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -23,6 +23,8 @@ func (game *Game) Run() {
 	game.WindowManager = gfx.BuildWindowManager()
 	game.StateManager = states.BuildStateManager()
 	game.debugMap = &map[string]interface{}{}
+
+	resources.Setup()
 
 	log.Info().Msg("Launched!")
 	go game.renderLoop()

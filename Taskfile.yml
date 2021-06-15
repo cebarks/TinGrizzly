@@ -49,9 +49,9 @@ tasks:
   clean:
     desc: clean any log and build files
     cmds:
-      - rm -rv log/ bin/ config.toml.example
+      - rm -rv log/ bin/ config.toml.example vendor/
     preconditions:
-      - test -d log || test -d bin
+      - test -d log || test -d bin || test -d vendor
 
   test:
     desc: run all tests

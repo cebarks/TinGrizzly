@@ -1,11 +1,9 @@
 package util
 
 import (
-	"image"
 	_ "image/png"
 	"os"
 
-	"github.com/cebarks/TinGrizzly/resources"
 	"github.com/rs/zerolog/log"
 
 	"github.com/faiface/pixel"
@@ -26,20 +24,6 @@ func Startup() {
 	log.Info().Str("version", GitCommit).Msg("Launching...")
 	ReloadCfgFromDisk()
 	Running = true
-	resources.Setup()
-}
-
-func LoadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-	img, _, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-	return pixel.PictureDataFromImage(img), nil
 }
 
 func PointToVec(p tile.Point) pixel.Vec {

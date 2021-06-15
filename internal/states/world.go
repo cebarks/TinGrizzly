@@ -22,7 +22,7 @@ func (s *StateWorld) Render(win *pixelgl.Window) {
 }
 
 func (s *StateWorld) Start() {
-	s.w = world.NewWorld(39, 39)
+	s.w = world.BuildWorld(39, 39)
 
 	s.w.Grid.Each(func(p tile.Point, t tile.Tile) {
 		if (p.X%2 == 0 && p.Y%2 == 0) || (p.X%2 == 1 && p.Y%2 == 1) {

@@ -1,7 +1,6 @@
 package util
 
 import (
-	"bytes"
 	"io/ioutil"
 	"os"
 	"path"
@@ -14,23 +13,18 @@ import (
 
 type Config struct {
 	Core struct {
-<<<<<<< Updated upstream
 		LogLevel string `toml:"LogLevel" default:"info"`
 
 		Tunables struct {
 			Ups int `toml:"UpdatesPerSecondTarget" default:"60"`
 			Fps int `toml:"FramesPerSecondTarget" default:"60"`
 
-			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"5000"`
+			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"100"`
 		} `toml:"tunables" comment:"low level engine settings"`
-=======
-		LogLevel    string `toml:"log-level"`
-		Performance struct {
-			Ups   int `toml:"ups" comment:"target ups"`
-			Fps   int `toml:"fps" comment:"target fps"`
-			Cores int `omitempty,toml:"cores" comment:"target fps"`
-		} `toml:"performance" comment:"performance settings"`
->>>>>>> Stashed changes
+
+		Resources struct {
+			Embedded bool `toml:"embedded" comment:"Whether or not resources should be loaded from the filesystem or the binary"`
+		} `toml:"resources" comment:"resource related settings"`
 	} `toml:"core" comment:"Core Engine settings"`
 }
 
@@ -54,24 +48,8 @@ func ReadConfig() *Config {
 	config := &Config{}
 
 	pwd, _ := os.Getwd()
-<<<<<<< Updated upstream
 
 	configFile := path.Join(pwd, "config.toml")
-=======
-	configFile := path.Join(pwd, "config.toml")
-
-	if !FileExists(configFile) { // Save an example config if one doesn't exist //TODO: extract this to its own helper cli?
-		var bytes bytes.Buffer
-		err := toml.NewEncoder(&bytes).Order(toml.OrderPreserve).Encode(config)
-
-		if err != nil {
-			log.Panic().Err(err).Msg("Unable to save sample config file.")
-		}
-
-		ioutil.WriteFile(configFile, bytes.Bytes(), 0644)
-		log.Fatal().Msgf("Config file doesn't exist. An example has been saved in its place.")
-	}
->>>>>>> Stashed changes
 
 	// Read config from the file
 	bytes, err := ioutil.ReadFile(configFile)

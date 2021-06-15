@@ -2,22 +2,21 @@ package world
 
 import (
 	"github.com/cebarks/TinGrizzly/internal/world/ecs"
+	"github.com/cebarks/TinGrizzly/resources"
 	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
 )
 
 type RenderSystem struct {
 	tileBatch *pixel.Batch
-	Canvas    *pixelgl.Canvas
+	// Canvas    *pixelgl.Canvas
 }
 
 func BuildRenderSystem() *RenderSystem {
 	rs := &RenderSystem{
-		tileBatch: pixel.NewBatch(&pixel.TrianglesData{}, resources.),
+		tileBatch: pixel.NewBatch(&pixel.TrianglesData{}, resources.Sheet.SourcePic()),
 	}
 
-	rs.tileBatch = 
-	rs.Canvas = pixelgl.NewCanvas(pixel.R(1, 1, 1024, 1024))
+	// rs.Canvas =
 
 	return rs
 }
