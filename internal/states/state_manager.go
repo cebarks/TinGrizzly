@@ -53,6 +53,7 @@ func BuildStateManager() *StateManager {
 			"null":     &StateNull{},
 			"mainMenu": &StateMainMenu{},
 			"dev":      &StateDevelopment{},
+			"resource": &StateResource{},
 		},
 	}
 

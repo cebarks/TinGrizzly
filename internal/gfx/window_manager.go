@@ -26,10 +26,10 @@ var (
 )
 
 func BuildWindowManager() *WindowManager {
-	w, h := parseResolution(util.Cfg().Graphics.Resolution)
-
 	glfw.WindowHint(glfw.Samples, util.Cfg().Graphics.Samples)
 	glfw.WindowHint(glfw.RefreshRate, 0)
+
+	w, h := parseResolution(util.Cfg().Graphics.Resolution)
 
 	window, err := pixelgl.NewWindow(pixelgl.WindowConfig{
 		Title:     title,
