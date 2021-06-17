@@ -20,7 +20,7 @@ func (s *StateDevelopment) Render(win *pixelgl.Window) {
 }
 
 func (s *StateDevelopment) Start() {
-	// s.batch = pixel.NewBatch(&pixel.TrianglesData{}, )
+
 }
 
 func (s StateDevelopment) Stop() {

@@ -16,16 +16,21 @@ type Config struct {
 		LogLevel string `toml:"LogLevel" default:"info"`
 
 		Tunables struct {
-			Ups int `toml:"UpdatesPerSecondTarget" default:"60"`
-			Fps int `toml:"FramesPerSecondTarget" default:"60"`
+			Ups int64 `toml:"UpdatesPerSecondTarget" default:"60"`
+			Fps int64 `toml:"FramesPerSecondTarget" default:"60"`
 
-			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"100"`
+			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"32"`
 		} `toml:"tunables" comment:"low level engine settings"`
-
-		Resources struct {
-			Embedded bool `toml:"embedded" comment:"Whether or not resources should be loaded from the filesystem or the binary"`
-		} `toml:"resources" comment:"resource related settings"`
 	} `toml:"core" comment:"Core Engine settings"`
+
+	Graphics struct {
+		Resolution string `toml:"resolution" default:"1920x1080"`
+		Vsync      bool   `toml:"vsync" default:"false"`
+		Fullscreen bool   `toml:"fullscreen" default:"false"`
+		Resources  struct {
+			Embedded bool `toml:"embedded" comment:"Should resources be loaded from the filesystem or the binary"`
+		} `toml:"resources" comment:"resources related settings"`
+	} `toml:"graphics" comment:"graphics related settings"`
 }
 
 var cfg *Config

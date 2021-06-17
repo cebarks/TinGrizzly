@@ -7,10 +7,16 @@
   [core.tunables]
     UpdatesPerSecondTarget = 60
     FramesPerSecondTarget = 60
-    MaxWorldPoolWorkers = 100
+    MaxWorldPoolWorkers = 32
 
-  # resource related settings
-  [core.resources]
+# graphics related settings
+[graphics]
+  resolution = "1920x1080"
+  vsync = false
+  fullscreen = false
 
-    # Whether or not resources should be loaded from the filesystem or the binary
+  # resources related settings
+  [graphics.resources]
+
+    # Should resources be loaded from the filesystem or the binary
     embedded = false

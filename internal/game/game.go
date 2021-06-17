@@ -34,7 +34,7 @@ func (game *Game) Run() {
 }
 
 func (game *Game) updateLoop() {
-	ticker := pixelutils.NewTickerV(util.TargetUPS, util.TargetUPS*60)
+	ticker := pixelutils.NewTickerV(util.Cfg().Core.Tunables.Ups, util.Cfg().Core.Tunables.Ups*60)
 
 	for util.Running {
 		if game.WindowManager.Pressed(pixelgl.KeyEscape) || game.WindowManager.Closed() {
@@ -58,7 +58,7 @@ func (game *Game) updateLoop() {
 }
 
 func (game *Game) renderLoop() {
-	ticker := pixelutils.NewTickerV(util.TargetFPS, util.TargetFPS*60)
+	ticker := pixelutils.NewTickerV(util.Cfg().Core.Tunables.Fps, util.Cfg().Core.Tunables.Fps*60)
 
 	for util.Running {
 		_, fps := ticker.Tick()

@@ -44,7 +44,7 @@ func GetResource(path string) fs.File {
 	var src string
 	var err error
 
-	if util.Cfg().Core.Resources.Embedded {
+	if util.Cfg().Graphics.Resources.Embedded {
 		file, err = resourceEmbed.Open(path)
 		src = "embedded"
 	} else {

@@ -1,7 +1,6 @@
 package util
 
 import (
-	_ "image/png"
 	"os"
 
 	"github.com/rs/zerolog/log"

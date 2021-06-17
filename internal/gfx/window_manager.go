@@ -3,6 +3,7 @@ package gfx
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -24,13 +25,19 @@ var (
 )
 
 func BuildWindowManager() *WindowManager {
+	w, h := parseResolution(util.Cfg().Graphics.Resolution)
+
 	window, err := pixelgl.NewWindow(pixelgl.WindowConfig{
 		Title:     title,
-		Bounds:    pixel.R(0, 0, 1920, 1080),
-		VSync:     false,
+		Bounds:    pixel.R(0, 0, w, h),
+		VSync:     util.Cfg().Graphics.Vsync,
 		Resizable: false,
 		// Monitor:   pixelgl.PrimaryMonitor(),
 	})
+
+	if util.Cfg().Graphics.Fullscreen {
+		window.SetMonitor(pixelgl.PrimaryMonitor())
+	}
 
 	if util.DebugError(err) {
 		log.Fatal().Msgf("Couldn't create window: %v", err)
@@ -59,4 +66,20 @@ func (wm *WindowManager) UpdateSubtitles() {
 
 	wm.SetTitle(fmt.Sprintf("%s - %s", title, joined))
 	subtitleMutex.Unlock()
+}
+
+func parseResolution(res string) (float64, float64) {
+	split := strings.Split(res, "x")
+
+	w, err := strconv.ParseInt(split[0], 10, 0)
+	if err != nil {
+		log.Fatal().Err(err).Msgf("Invalid resolution defined: %s", res)
+	}
+
+	h, err := strconv.ParseInt(split[1], 10, 0)
+	if err != nil {
+		log.Fatal().Err(err).Msgf("Invalid resolution defined: %s", res)
+	}
+
+	return float64(w), float64(h)
 }
