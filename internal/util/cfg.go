@@ -24,9 +24,10 @@ type Config struct {
 	} `toml:"core" comment:"Core Engine settings"`
 
 	Graphics struct {
-		Resolution string `toml:"resolution" default:"1920x1080"`
+		Resolution string `toml:"resolution" default:"1920x1080"` //TODO: Check against https://pkg.go.dev/github.com/go-gl/glfw/v3.1/glfw#VidMode
 		Vsync      bool   `toml:"vsync" default:"false"`
 		Fullscreen bool   `toml:"fullscreen" default:"false"`
+		Samples    int    `toml:"samples" default:"2" comment:"MSAA samples (0 to disable)"`
 		Resources  struct {
 			Embedded bool `toml:"embedded" comment:"Should resources be loaded from the filesystem or the binary"`
 		} `toml:"resources" comment:"resources related settings"`

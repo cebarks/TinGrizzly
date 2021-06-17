@@ -12,6 +12,7 @@ import (
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
 type WindowManager struct {
@@ -26,6 +27,9 @@ var (
 
 func BuildWindowManager() *WindowManager {
 	w, h := parseResolution(util.Cfg().Graphics.Resolution)
+
+	glfw.WindowHint(glfw.Samples, util.Cfg().Graphics.Samples)
+	glfw.WindowHint(glfw.RefreshRate, 0)
 
 	window, err := pixelgl.NewWindow(pixelgl.WindowConfig{
 		Title:     title,
