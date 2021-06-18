@@ -36,15 +36,14 @@ func BuildWindowManager() *WindowManager {
 		Bounds:    pixel.R(0, 0, w, h),
 		VSync:     util.Cfg().Graphics.Vsync,
 		Resizable: false,
-		// Monitor:   pixelgl.PrimaryMonitor(),
 	})
-
-	if util.Cfg().Graphics.Fullscreen {
-		window.SetMonitor(pixelgl.PrimaryMonitor())
-	}
 
 	if util.DebugError(err) {
 		log.Fatal().Msgf("Couldn't create window: %v", err)
+	}
+
+	if util.Cfg().Graphics.Fullscreen {
+		window.SetMonitor(pixelgl.PrimaryMonitor())
 	}
 
 	winm := WindowManager{Window: window}

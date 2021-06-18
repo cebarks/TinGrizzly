@@ -28,7 +28,8 @@ type Config struct {
 		Vsync      bool   `toml:"vsync" default:"false"`
 		Fullscreen bool   `toml:"fullscreen" default:"false"`
 		Samples    int    `toml:"samples" default:"2" comment:"MSAA samples (0 to disable)"`
-		Resources  struct {
+
+		Resources struct {
 			Embedded bool `toml:"embedded" comment:"Should resources be loaded from the filesystem or the binary"`
 		} `toml:"resources" comment:"resources related settings"`
 	} `toml:"graphics" comment:"graphics related settings"`
