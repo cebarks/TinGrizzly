@@ -10,9 +10,6 @@ type StateDevelopment struct {
 }
 
 func (s StateDevelopment) Update(sc *StateContext, dt float64) {
-	if sc.WindowManager.Pressed(pixelgl.Key1) {
-		sc.StateManager.SetState("null")
-	}
 }
 
 func (s *StateDevelopment) Render(win *pixelgl.Window) {
@@ -31,9 +28,6 @@ type StateNull struct {
 }
 
 func (s StateNull) Update(sc *StateContext, dt float64) {
-	if sc.WindowManager.Pressed(pixelgl.Key2) {
-		sc.StateManager.SetState("dev")
-	}
 }
 
 func (s StateNull) Render(win *pixelgl.Window) {

@@ -61,3 +61,16 @@ func BuildStateManager() *StateManager {
 
 	return &sm
 }
+
+//CheckStateKeys switches the active state based on number keys
+func CheckStateKeys(sc *StateContext) {
+	if sc.WindowManager.Pressed(pixelgl.Key0) {
+		sc.StateManager.SetState("null")
+	}
+	if sc.WindowManager.Pressed(pixelgl.Key1) {
+		sc.StateManager.SetState("dev")
+	}
+	if sc.WindowManager.Pressed(pixelgl.Key2) {
+		sc.StateManager.SetState("resource")
+	}
+}

@@ -47,7 +47,7 @@ func (game *Game) updateLoop() {
 			StateManager:  game.StateManager,
 			WindowManager: game.WindowManager,
 		}
-
+		states.CheckStateKeys(ctx)
 		game.StateManager.ActiveState.Update(ctx, dt)
 
 		game.WindowManager.SetSubtitle("ups", fmt.Sprintf("%.f", ups))

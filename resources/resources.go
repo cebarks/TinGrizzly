@@ -12,31 +12,39 @@ import (
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/cebarks/spriteplus"
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/text"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/image/font/basicfont"
 )
 
 //go:embed *
 var resourceEmbed embed.FS
 
 var Sheet *spriteplus.SpriteSheet
+var Atlas *text.Atlas
 
 func Setup() {
-	Sheet = spriteplus.NewSpriteSheet(true)
+	Atlas = text.NewAtlas(
+		basicfont.Face7x13, //TODO: get a better font
+		text.ASCII,         //TODO: support more than just ascii
+	)
+
+	Sheet = spriteplus.NewSpriteSheet(true, true)
 
 	err := Sheet.AddSprite(pixel.PictureDataFromImage(loadImageFromReader(GetResource("assets/ball.png"))), "ball")
 	if util.DebugError(err) {
 		log.Panic().Err(err).Msg("could not load ball.png")
 	}
 
-	importTileSet("assets/tiles.png")
+	importTileSet("resources/assets/tiles.json")
 }
 
 func importTileSet(defPath string) {
-	// importedTileCount, err := Sheet.AddTileset(loadImageFromReader(GetResource(path)), ids, 16, 16, 1, 1)
-	// if util.DebugError(err) {
-	// 	log.Panic().Err(err).Msg("could not load tileset: %s", defPath)
-	// }
-	// log.Debug().Msgf("Imported %d tiles from tileset: %s", importedTileCount, "assets/tiles.png")
+	importedTileCount, err := Sheet.AddTilesetFromPath(defPath)
+	if util.DebugError(err) {
+		log.Panic().Err(err).Msgf("could not load tileset: %s", defPath)
+	}
+	log.Debug().Msgf("Imported %d tiles from tileset: %s", importedTileCount, defPath)
 }
 
 func GetResource(path string) fs.File {

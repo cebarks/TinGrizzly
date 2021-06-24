@@ -1,7 +1,6 @@
 package util
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -16,7 +15,7 @@ type Config struct {
 		LogLevel string `toml:"LogLevel" default:"info"`
 
 		Tunables struct {
-			Ups int64 `toml:"UpdatesPerSecondTarget" default:"60"`
+			Ups int64 `toml:"UpdatesPerSecondTarget" default:"50"`
 			Fps int64 `toml:"FramesPerSecondTarget" default:"60"`
 
 			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"32"`
@@ -59,7 +58,7 @@ func ReadConfig() *Config {
 	configFile := path.Join(pwd, "config.toml")
 
 	// Read config from the file
-	bytes, err := ioutil.ReadFile(configFile)
+	bytes, err := os.ReadFile(configFile)
 
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Unable to read config file at: '%s'", configFile)
