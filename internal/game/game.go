@@ -62,11 +62,14 @@ func (game *Game) renderLoop() {
 
 	for util.Running {
 		_, fps := ticker.Tick()
-
-		game.StateManager.ActiveState.Render(game.WindowManager.Window)
 		game.WindowManager.SetSubtitle("fps", fmt.Sprintf("%.f", fps))
 
+		if game.WindowManager.Window.Focused() {
+			game.StateManager.ActiveState.Render(game.WindowManager.Window)
+		}
+
 		game.WindowManager.Update()
+
 		ticker.Wait()
 	}
 }
