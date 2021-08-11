@@ -26,7 +26,7 @@ var Atlas *text.Atlas
 func Setup() {
 	Atlas = text.NewAtlas(
 		basicfont.Face7x13, //TODO: get a better font
-		text.ASCII,         //TODO: support more than just ascii
+		text.ASCII,         //TODO: support more than just ascii (hopefully Unicode)
 	)
 
 	Sheet = spriteplus.NewSpriteSheet(true, true)
