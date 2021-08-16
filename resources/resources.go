@@ -35,13 +35,13 @@ func Setup() {
 
 	Sheet = spriteplus.NewSpriteSheet(util.Cfg().Core.LogLevel == "debug")
 
-	tiles, err := resourceEmbed.ReadDir("assets/tiles")
+	tiles, err := resourceEmbed.ReadDir("assets/sprites")
 	if err != nil {
-		log.Fatal().Err(err).Msg("Couldn't load tiles dir")
+		log.Fatal().Err(err).Msg("Couldn't load sprites dir")
 	}
 
 	for _, t := range tiles {
-		res := GetResource("assets/tiles/" + t.Name())
+		res := GetResource("assets/sprites/" + t.Name())
 		defer res.Close()
 		img, _, err := image.Decode(res)
 		if err != nil {
@@ -50,6 +50,8 @@ func Setup() {
 		id := strings.Split(t.Name(), ".")[0]
 		Sheet.AddSprite(pixel.PictureDataFromImage(img), id)
 	}
+
+	Sheet.Optimize()
 
 	dur := timer.Stop()
 	log.Info().Msgf("Took %v to load resources.", dur)
