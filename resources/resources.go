@@ -12,7 +12,6 @@ import (
 
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/cebarks/spriteplus"
-	"github.com/dusk125/pixelutils"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/text"
 	"github.com/rs/zerolog/log"
@@ -26,6 +25,9 @@ var Sheet *spriteplus.SpriteSheet
 var Atlas *text.Atlas
 
 func Setup() {
+	timer := util.Timer{}
+	timer.Start()
+
 	Atlas = text.NewAtlas(
 		basicfont.Face7x13, //TODO: get a better font
 		text.ASCII,         //TODO: support more than just ascii (hopefully Unicode)
@@ -33,25 +35,24 @@ func Setup() {
 
 	Sheet = spriteplus.NewSpriteSheet(util.Cfg().Core.LogLevel == "debug")
 
-	pic, err := pixelutils.LoadPictureData("resources/assets/tiles/sword.png")
-	if err != nil {
-		log.Fatal().Err(err).Msg("Couldn't load sword.png")
-	}
-	Sheet.AddSprite(pic, "sword")
-
 	tiles, err := resourceEmbed.ReadDir("assets/tiles")
 	if err != nil {
 		log.Fatal().Err(err).Msg("Couldn't load tiles dir")
 	}
 
 	for _, t := range tiles {
-		img, _, err := image.Decode(GetResource("assets/tiles/" + t.Name()))
+		res := GetResource("assets/tiles/" + t.Name())
+		defer res.Close()
+		img, _, err := image.Decode(res)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to load tiles")
 		}
 		id := strings.Split(t.Name(), ".")[0]
 		Sheet.AddSprite(pixel.PictureDataFromImage(img), id)
 	}
+
+	dur := timer.Stop()
+	log.Info().Msgf("Took %v to load resources.", dur)
 }
 
 func GetResource(path string) fs.File {
