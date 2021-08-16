@@ -1,7 +1,6 @@
 package world
 
 import (
-	"github.com/cebarks/TinGrizzly/internal/world/ecs"
 	"github.com/cebarks/TinGrizzly/resources"
 	"github.com/faiface/pixel"
 )
@@ -21,6 +20,6 @@ func BuildRenderSystem() *RenderSystem {
 	return rs
 }
 
-func (rs *RenderSystem) Update(delta float64, entity ecs.Entity) {
+func (rs *RenderSystem) Update(delta float64, entity Entity) {
 
 }

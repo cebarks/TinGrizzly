@@ -5,7 +5,6 @@ import (
 
 	"github.com/lrita/cmap"
 
-	"github.com/cebarks/TinGrizzly/internal/world/ecs"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/kelindar/tile"
 )
@@ -21,7 +20,7 @@ type World struct {
 	Lookup map[uint32]*TileData
 	Grid   *tile.Grid
 
-	Manager *ecs.Manager
+	Manager *Manager
 }
 
 func (w *World) Render(win *pixelgl.Window) {

@@ -7,8 +7,6 @@ vars:
         if [ `uname -s` = "Linux" ]; then
           if grep -q "microsoft" <<< `uname -r`; then
             echo true
-          else
-            echo false
           fi
         else
           echo false
