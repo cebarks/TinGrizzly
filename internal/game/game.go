@@ -53,6 +53,7 @@ func (game *Game) updateLoop() {
 		game.WindowManager.SetSubtitle("ups", fmt.Sprintf("%.f", ups))
 
 		game.WindowManager.UpdateSubtitles()
+		game.WindowManager.UpdateInput()
 		ticker.Wait()
 	}
 }
@@ -68,7 +69,7 @@ func (game *Game) renderLoop() {
 			game.StateManager.ActiveState.Render(game.WindowManager.Window)
 		}
 
-		game.WindowManager.Update()
+		game.WindowManager.SwapBuffers()
 
 		ticker.Wait()
 	}
