@@ -3,6 +3,7 @@ package resources
 import (
 	"embed"
 	"image"
+	_ "image/png"
 	"io"
 	"io/fs"
 	"os"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/cebarks/spriteplus"
+	"github.com/dusk125/pixelutils"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/text"
 	"github.com/rs/zerolog/log"
@@ -29,22 +31,27 @@ func Setup() {
 		text.ASCII,         //TODO: support more than just ascii (hopefully Unicode)
 	)
 
-	Sheet = spriteplus.NewSpriteSheet(true, true)
+	Sheet = spriteplus.NewSpriteSheet(util.Cfg().Core.LogLevel == "debug")
 
-	err := Sheet.AddSprite(pixel.PictureDataFromImage(loadImageFromReader(GetResource("assets/ball.png"))), "ball")
-	if util.DebugError(err) {
-		log.Panic().Err(err).Msg("could not load ball.png")
+	pic, err := pixelutils.LoadPictureData("resources/assets/tiles/sword.png")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Couldn't load sword.png")
+	}
+	Sheet.AddSprite(pic, "sword")
+
+	tiles, err := resourceEmbed.ReadDir("assets/tiles")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Couldn't load tiles dir")
 	}
 
-	importTileSet("resources/assets/tiles.json")
-}
-
-func importTileSet(defPath string) {
-	importedTileCount, err := Sheet.AddTilesetFromPath(defPath)
-	if util.DebugError(err) {
-		log.Panic().Err(err).Msgf("could not load tileset: %s", defPath)
+	for _, t := range tiles {
+		img, _, err := image.Decode(GetResource("assets/tiles/" + t.Name()))
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to load tiles")
+		}
+		id := strings.Split(t.Name(), ".")[0]
+		Sheet.AddSprite(pixel.PictureDataFromImage(img), id)
 	}
-	log.Debug().Msgf("Imported %d tiles from tileset: %s", importedTileCount, defPath)
 }
 
 func GetResource(path string) fs.File {

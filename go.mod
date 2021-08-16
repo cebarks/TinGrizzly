@@ -3,7 +3,7 @@ module github.com/cebarks/TinGrizzly
 go 1.16
 
 require (
-	github.com/cebarks/spriteplus v0.3.5
+	github.com/cebarks/spriteplus v0.5.1
 	github.com/dusk125/pixelutils v1.0.0
 	github.com/faiface/pixel v0.10.0
 	github.com/fatih/color v1.12.0 // indirect
