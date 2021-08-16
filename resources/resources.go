@@ -4,7 +4,6 @@ import (
 	"embed"
 	"image"
 	_ "image/png"
-	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -28,11 +27,22 @@ func Setup() {
 	timer := util.Timer{}
 	timer.Start()
 
+	loadAtlas()
+
+	loadSheet()
+
+	dur := timer.Stop()
+	log.Info().Msgf("Took %v to load resources.", dur)
+}
+
+func loadAtlas() {
 	Atlas = text.NewAtlas(
 		basicfont.Face7x13, //TODO: get a better font
 		text.ASCII,         //TODO: support more than just ascii (hopefully Unicode)
 	)
+}
 
+func loadSheet() {
 	Sheet = spriteplus.NewSpriteSheet(util.Cfg().Core.LogLevel == "debug")
 
 	tiles, err := resourceEmbed.ReadDir("assets/sprites")
@@ -52,9 +62,6 @@ func Setup() {
 	}
 
 	Sheet.Optimize()
-
-	dur := timer.Stop()
-	log.Info().Msgf("Took %v to load resources.", dur)
 }
 
 func GetResource(path string) fs.File {
@@ -117,15 +124,4 @@ func GetResourceImage(path string) (image.Image, string) {
 
 func GetSprite(sprite string) *pixel.Sprite {
 	return Sheet.GetSprite(sprite)
-}
-
-func loadImageFromReader(r io.Reader) image.Image {
-	i, fmt, err := image.Decode(r)
-
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Couldn't load picture.")
-	}
-
-	log.Trace().Msgf("Loaded image; format: %s", fmt)
-	return i
 }
