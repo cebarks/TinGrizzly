@@ -1,9 +1,9 @@
 package world
 
-type TileType byte
+type TileType uint
 
 const (
-	TileTypeEmpty = iota
+	TileTypeEmpty TileType = iota
 	TileTypeStone
 )
 

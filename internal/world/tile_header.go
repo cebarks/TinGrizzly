@@ -10,6 +10,11 @@ import (
 	"github.com/kelindar/tile"
 )
 
+type TileData struct {
+	State  State
+	Header TileHeader
+}
+
 type TileHeader struct {
 	_       byte
 	Bitmask TileBitmask
@@ -26,7 +31,7 @@ type TileHeader struct {
 // }
 
 //Save saves this TileHeader to the given point and grid.
-func (header *TileHeader) Save(grid *tile.Grid, p tile.Point) {
+func (header *TileHeader) SaveTo(grid *tile.Grid, p tile.Point) {
 	buf := new(bytes.Buffer)
 	if err := binary.Write(buf, binary.LittleEndian, header); util.DebugError(err) {
 		log.Fatal().Err(err).Msg("Could not save header") //TODO log.Fatal call

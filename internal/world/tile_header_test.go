@@ -26,7 +26,7 @@ func Test_Save(t *testing.T) {
 		Index:   425678,
 	}
 
-	header.Save(grid, tile.At(2, 2))
+	header.SaveTo(grid, tile.At(2, 2))
 
 	actual, _ := grid.At(2, 2)
 	expected := tile.Tile{0x0, 0x1, 0xce, 0x7e, 0x6, 0x0}

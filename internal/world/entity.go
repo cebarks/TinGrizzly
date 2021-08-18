@@ -6,16 +6,16 @@ import (
 )
 
 type Entity struct {
-	Components []Component
+	Components []string
 	Id         int
 	State      *cmap.Cmap
 }
 
-var idGen *pixelutils.IDGen = pixelutils.NewIDGen()
+var eidGen *pixelutils.IDGen = pixelutils.NewIDGen()
 
-func NewEntity(components ...Component) *Entity {
+func NewEntity(components ...string) *Entity {
 	return &Entity{
 		Components: components,
-		Id:         idGen.Gen(),
+		Id:         eidGen.Gen(),
 	}
 }
