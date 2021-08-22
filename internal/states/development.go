@@ -9,11 +9,13 @@ import (
 type StateDevelopment struct {
 }
 
-func (s StateDevelopment) Update(sc *StateContext, dt float64) {
+func (s StateDevelopment) Update(sc *StateContext, dt float64) error {
+	return nil
 }
 
-func (s *StateDevelopment) Render(win *pixelgl.Window) {
+func (s *StateDevelopment) Render(win *pixelgl.Window) error {
 	win.Clear(colornames.Aqua)
+	return nil
 }
 
 func (s *StateDevelopment) Start() {
@@ -27,11 +29,13 @@ func (s StateDevelopment) Stop() {
 type StateNull struct {
 }
 
-func (s StateNull) Update(sc *StateContext, dt float64) {
+func (s StateNull) Update(sc *StateContext, dt float64) error {
+	return nil
 }
 
-func (s StateNull) Render(win *pixelgl.Window) {
+func (s StateNull) Render(win *pixelgl.Window) error {
 	win.Clear(colornames.Paleturquoise)
+	return nil
 }
 
 func (s StateNull) Start() {

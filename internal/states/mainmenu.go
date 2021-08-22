@@ -9,12 +9,14 @@ import (
 type StateMainMenu struct {
 }
 
-func (s StateMainMenu) Update(wm *StateContext, dt float64) {
+func (s StateMainMenu) Update(wm *StateContext, dt float64) error {
 
+	return nil
 }
 
-func (s StateMainMenu) Render(win *pixelgl.Window) {
+func (s StateMainMenu) Render(win *pixelgl.Window) error {
 	win.Clear(colornames.Darksalmon)
+	return nil
 }
 
 func (s StateMainMenu) Start() {

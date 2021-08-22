@@ -17,8 +17,8 @@ type StateManager struct {
 
 // State implements the base interface/struct for any State
 type State interface {
-	Update(win *StateContext, dt float64)
-	Render(win *pixelgl.Window)
+	Update(win *StateContext, dt float64) error
+	Render(win *pixelgl.Window) error
 	Start()
 	Stop()
 }
@@ -54,6 +54,7 @@ func BuildStateManager() *StateManager {
 			"mainMenu": &StateMainMenu{},
 			"dev":      &StateDevelopment{},
 			"resource": &StateResource{},
+			"conway":   &StateConway{},
 		},
 	}
 
@@ -66,11 +67,11 @@ func BuildStateManager() *StateManager {
 func CheckStateKeys(sc *StateContext) {
 	if sc.WindowManager.JustPressed(pixelgl.Key0) {
 		sc.StateManager.SetState("null")
-	}
-	if sc.WindowManager.JustPressed(pixelgl.Key1) {
+	} else if sc.WindowManager.JustPressed(pixelgl.Key1) {
 		sc.StateManager.SetState("dev")
-	}
-	if sc.WindowManager.JustPressed(pixelgl.Key2) {
+	} else if sc.WindowManager.JustPressed(pixelgl.Key2) {
 		sc.StateManager.SetState("resource")
+	} else if sc.WindowManager.JustPressed(pixelgl.Key9) {
+		sc.StateManager.SetState("conway")
 	}
 }

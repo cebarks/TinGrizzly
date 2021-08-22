@@ -11,12 +11,14 @@ import (
 type StateResource struct {
 }
 
-func (s *StateResource) Update(sc *StateContext, dt float64) {
+func (s *StateResource) Update(sc *StateContext, dt float64) error {
+	return nil
 }
 
-func (s *StateResource) Render(win *pixelgl.Window) {
+func (s *StateResource) Render(win *pixelgl.Window) error {
 	win.Clear(colornames.Brown)
 	resources.Sheet.Packr.Draw(win, pixel.IM.Moved(resources.Sheet.Packr.Center()))
+	return nil
 }
 
 func (s *StateResource) Start() {
