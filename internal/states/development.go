@@ -62,7 +62,7 @@ func (s StateNull) Render(win *pixelgl.Window) error {
 }
 
 func (s StateNull) Start() {
-	// log.Error().Err(fmt.Errorf("test: %v", []int{1, 2, 3})).Msg("Test Error")
+
 }
 
 func (s StateNull) Stop() {

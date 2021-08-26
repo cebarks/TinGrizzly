@@ -55,10 +55,11 @@ func BuildStateManager() *StateManager {
 			"dev":      &StateDevelopment{},
 			"resource": &StateResource{},
 			"conway":   &StateConway{},
+			"loading":  &StateLoading{},
 		},
 	}
 
-	sm.SetState("dev")
+	sm.SetState("loading")
 
 	return &sm
 }
