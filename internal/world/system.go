@@ -1,33 +1,29 @@
 package world
 
-import "github.com/kelindar/tile"
-
 type SystemType int8
 
 const (
-	SystemTypeDummy SystemType = iota
+	SystemTypeDummy SystemType = 1 << iota
 	SystemTypeTile
 	SystemTypeEntity
 )
 
 type System struct {
-	TileUpdateFunc   func(sys System, target tile.Point, delta float64)
-	EntityUpdateFunc func(sys System, target Entity, delta float64)
-
-	UpdateView *tile.View
+	TileUpdateFunc   func(sys *System, target *TileData, delta float64) error
+	EntityUpdateFunc func(sys *System, target *Entity, delta float64) error
 
 	Priority   int
 	Id         string
-	Type       int
+	Type       SystemType
 	Concurrent bool
 }
 
-func (s *System) UpdateTile(delta float64, entity Entity, loc tile.Point) error {
-	return nil
+func (s *System) UpdateTile(delta float64, tile *TileData) error {
+	return s.TileUpdateFunc(s, tile, delta)
 }
 
-func (s *System) UpdateEntity(delta float64, entity Entity, loc tile.Point) error {
-	return nil
+func (s *System) UpdateEntity(delta float64, entity *Entity) error {
+	return s.EntityUpdateFunc(s, entity, delta)
 }
 
 //systems is a sortable slice of systems

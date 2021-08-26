@@ -7,12 +7,12 @@ const (
 	TileTypeStone
 )
 
+type TileBitmask byte
+
 const (
 	FlagActive TileBitmask = 1 << iota
 	FlagStateless
 )
-
-type TileBitmask byte
 
 // AddFlag add a flag to the bitmask
 func (f *TileBitmask) AddFlag(flag TileBitmask) { *f |= flag }

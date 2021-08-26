@@ -48,7 +48,12 @@ func (game *Game) updateLoop() {
 			WindowManager: game.WindowManager,
 		}
 		states.CheckStateKeys(ctx)
-		game.StateManager.ActiveState.Update(ctx, dt)
+
+		stateErr := game.StateManager.ActiveState.Update(ctx, dt)
+
+		if util.DebugError(stateErr) {
+			log.Error().Err(stateErr).Msg("error during game loop.")
+		}
 
 		game.WindowManager.SetSubtitle("ups", fmt.Sprintf("%.f", ups))
 

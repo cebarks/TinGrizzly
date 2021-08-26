@@ -1,18 +1,16 @@
 package world
 
 import (
-	"bytes"
 	"encoding/binary"
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/kelindar/tile"
 )
 
 type TileData struct {
-	State  State
-	Header TileHeader
+	State  *State
+	Header *TileHeader
 }
 
 type TileHeader struct {
@@ -21,41 +19,37 @@ type TileHeader struct {
 	Index   uint32
 }
 
-//Tile returns a tile representation of this TileHeader
-// func (th *TileHeader) Tile() tile.Tile {
-// 	buf := new(bytes.Buffer)
-// 	binary.Write(buf, binary.LittleEndian, th)
-// 	var t tile.Tile
-// 	copy(t[:], buf.Bytes())
-// 	return t
-// }
-
-//Save saves this TileHeader to the given point and grid.
-func (header *TileHeader) SaveTo(grid *tile.Grid, p tile.Point) {
-	buf := new(bytes.Buffer)
-	if err := binary.Write(buf, binary.LittleEndian, header); util.DebugError(err) {
-		log.Fatal().Err(err).Msg("Could not save header") //TODO log.Fatal call
-	}
-
-	var t tile.Tile
-	copy(t[:], buf.Bytes())
-	grid.WriteAt(p.X, p.Y, t)
-}
-
-//Load loads the tile from the given point and grid into this TileHeader.
-func (header *TileHeader) Load(grid *tile.Grid, p tile.Point) {
-	t, _ := grid.At(p.X, p.Y)
-	header.FromTile(t)
-}
-
 //FromTile loads the given tile into this TileHeader.
-func (header *TileHeader) FromTile(t tile.Tile) {
-	buf := new(bytes.Buffer)
-	for _, b := range t {
-		buf.WriteByte(b)
+func HeaderFromTile(t tile.Tile) *TileHeader {
+	magic := t[0]
+	rawBitmask := t[1]
+	rawIndex := t[2:6]
+
+	if magic != 42 {
+		log.Panic().Msg("CORRUPTION: BUT WHERE'S THE ANSWER TO EVERYTHING")
 	}
 
-	if err := binary.Read(buf, binary.LittleEndian, header); util.DebugError(err) {
-		log.Fatal().Err(err).Msg("Could not load header.") //TODO log.Fatal call
+	return &TileHeader{
+		Bitmask: TileBitmask(rawBitmask),
+		Index:   binary.LittleEndian.Uint32(rawIndex),
 	}
+}
+
+//ToTile returns a tile version of this header
+func (header *TileHeader) ToTile() tile.Tile {
+	var index []byte = make([]byte, 4)
+	binary.LittleEndian.PutUint32(index, header.Index)
+	return tile.Tile{42, byte(header.Bitmask), index[0], index[1], index[2], index[3]}
+}
+
+func (td *TileData) Save(grid *tile.Grid) error {
+	l, err := td.State.Get("location")
+	if err != nil {
+		return err
+	}
+
+	loc := l.(tile.Point)
+
+	grid.WriteAt(loc.X, loc.Y, td.Header.ToTile())
+	return nil
 }

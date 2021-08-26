@@ -11,7 +11,8 @@ import (
 
 var (
 	// Running - global variable for app state
-	Running   bool
+	Running bool
+	//GitCommit is set to the most recent git commit hash at build time
 	GitCommit string
 
 	TargetFPS int64 = 144

@@ -56,6 +56,11 @@ tasks:
     cmds:
       - go test ./...
 
+  testc:
+    desc: run all tests (with coverage)
+    cmds:
+      - go test ./... -cover -covermode atomic
+
   testv:
     desc: run all tests verbosely (with coverage)
     cmds:

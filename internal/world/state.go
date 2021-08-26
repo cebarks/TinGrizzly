@@ -18,6 +18,12 @@ type State struct {
 	store *cmap.Cmap
 }
 
+func NewState() *State {
+	return &State{
+		store: &cmap.Cmap{},
+	}
+}
+
 func (s *State) Get(key string) (interface{}, error) {
 	if value, ok := s.store.Load(key); ok {
 		return value, nil
@@ -25,6 +31,9 @@ func (s *State) Get(key string) (interface{}, error) {
 	return nil, fmt.Errorf("attempt to access invalid state key")
 }
 
+// GetWithDefault returns the existing value for the key if present.
+// Otherwise, it stores and returns the given value.
+// The loaded result is true if the value was loaded, false if stored.
 func (s *State) GetWithDefault(key string, defaultValue interface{}) (interface{}, bool) {
 	return s.store.LoadOrStore(key, defaultValue)
 }
@@ -32,9 +41,8 @@ func (s *State) GetWithDefault(key string, defaultValue interface{}) (interface{
 func (s *State) Set(key string, value interface{}) {
 	for k, t := range enforcedTypes {
 		if k == key {
-			if reflect.TypeOf(value) == t {
-				log.Error().Msgf("invalid type `%T` for state-key `%s`", value, key)
-				log.Trace().Msgf("state dump: %+v", s)
+			if reflect.TypeOf(value) != t {
+				log.Panic().Msgf("invalid type `%T` for state-key `%s`", value, key)
 			}
 		}
 	}

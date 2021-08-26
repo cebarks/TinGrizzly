@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
+	"github.com/kelindar/tile"
 	"github.com/panjf2000/ants/v2"
 	"github.com/rs/zerolog/log"
 )
@@ -29,8 +30,26 @@ func NewManager(world *World) *Manager {
 	}
 }
 
-func (manager *Manager) Update(delta float64) {
-	manager.World.Update(delta)
+func (manager *Manager) Update(delta float64) error {
+	for _, sys := range manager.Systems {
+		if sys.Type&SystemTypeDummy != 0 {
+			log.Debug().Msg("ignoring dummy system during update tick")
+			continue
+		}
+
+		if sys.Type&SystemTypeEntity != 0 {
+			for _, ent := range manager.World.Entities {
+				sys.UpdateEntity(delta, ent)
+			}
+		}
+
+		if sys.Type&SystemTypeTile != 0 {
+			manager.World.Grid.Each(func(p tile.Point, t tile.Tile) {
+				sys.UpdateTile(delta, manager.World.TileDataLookupFromTile(t))
+			})
+		}
+	}
+	return manager.World.Update(delta)
 }
 
 func (manager *Manager) AddSystem(system *System) {
