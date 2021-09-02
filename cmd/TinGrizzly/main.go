@@ -12,5 +12,6 @@ func main() {
 	util.Startup()
 
 	util.SetupCloseHandler()
+
 	pixelgl.Run(gam.Run)
 }

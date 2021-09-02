@@ -24,6 +24,8 @@ func Startup() {
 	log.Info().Str("version", GitCommit).Msg("Launching...")
 	ReloadCfgFromDisk()
 	Running = true
+
+	debugInit()
 }
 
 func PointToVec(p tile.Point) pixel.Vec {

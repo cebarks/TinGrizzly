@@ -1,8 +1,6 @@
 package game
 
 import (
-	"fmt"
-
 	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/gfx"
@@ -15,15 +13,14 @@ import (
 type Game struct {
 	StateManager  *states.StateManager
 	WindowManager *gfx.WindowManager
-	debugMap      *map[string]interface{}
 }
 
 func (game *Game) Run() {
 	game.WindowManager = gfx.BuildWindowManager()
 	game.StateManager = states.BuildStateManager()
-	game.debugMap = &map[string]interface{}{}
 
 	log.Info().Msg("Initialized!")
+
 	go game.renderLoop()
 	game.updateLoop()
 
@@ -39,6 +36,7 @@ func (game *Game) updateLoop() {
 			return
 		}
 		dt, ups := ticker.Tick()
+		util.DebugMap.Store("ups", ups)
 
 		ctx := &states.StateContext{
 			StateManager:  game.StateManager,
@@ -52,9 +50,7 @@ func (game *Game) updateLoop() {
 			log.Error().Err(stateErr).Msg("error during game loop.")
 		}
 
-		game.WindowManager.SetSubtitle("ups", fmt.Sprintf("%.f", ups))
-
-		game.WindowManager.UpdateSubtitles()
+		game.WindowManager.SetSubtitle(util.BuildDebugSubtitle())
 		game.WindowManager.UpdateInput()
 		ticker.Wait()
 	}
@@ -65,7 +61,7 @@ func (game *Game) renderLoop() {
 
 	for util.Running {
 		_, fps := ticker.Tick()
-		game.WindowManager.SetSubtitle("fps", fmt.Sprintf("%.f", fps))
+		util.DebugMap.Store("fps", fps)
 
 		if game.WindowManager.Window.Focused() {
 			game.StateManager.ActiveState.Render(game.WindowManager.Window)

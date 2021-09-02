@@ -2,10 +2,8 @@ package gfx
 
 import (
 	"fmt"
-	"sort"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/rs/zerolog/log"
 
@@ -20,9 +18,7 @@ type WindowManager struct {
 }
 
 var (
-	title         string = "TinGrizzly"
-	subtitles            = make(map[string]interface{})
-	subtitleMutex        = &sync.Mutex{}
+	title string = "TinGrizzly"
 )
 
 func BuildWindowManager() *WindowManager {
@@ -50,25 +46,8 @@ func BuildWindowManager() *WindowManager {
 	return &winm
 }
 
-func (wm *WindowManager) SetSubtitle(key string, subtitle interface{}) {
-	subtitleMutex.Lock()
-	subtitles[key] = subtitle
-	subtitleMutex.Unlock()
-}
-
-func (wm *WindowManager) UpdateSubtitles() {
-	subtitleMutex.Lock()
-	var subs []string
-	for k, sub := range subtitles {
-		subs = append(subs, fmt.Sprintf("%s=%s", k, sub))
-	}
-
-	sort.Slice(subs, func(i, j int) bool { return subs[i] < subs[j] })
-
-	joined := strings.Join(subs, "|")
-
-	wm.SetTitle(fmt.Sprintf("%s - %s", title, joined))
-	subtitleMutex.Unlock()
+func (wm *WindowManager) SetSubtitle(subtitle string) {
+	wm.SetTitle(fmt.Sprintf("%s - %s", title, subtitle))
 }
 
 func parseResolution(res string) (float64, float64) {
