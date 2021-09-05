@@ -25,7 +25,7 @@ func (w *World) Update(delta float64) error {
 }
 
 //NewWorld creates an world of the given size with blank tiles. World size must be a multiple of 3.
-func NewWorld(sizeX, sizeY int16) *World { //TODO: support bigger maps backed by multiple grids.
+func NewWorld(sizeX, sizeY int16) *World { //TODO: support bigger maps backed by multiple grids?
 	world := &World{
 		Lookup:   make(map[uint32]*TileData, sizeX*sizeY),
 		Entities: make([]*Entity, 42),
@@ -34,7 +34,6 @@ func NewWorld(sizeX, sizeY int16) *World { //TODO: support bigger maps backed by
 
 	world.Grid.Each(func(p tile.Point, t tile.Tile) {
 		initEmptyTile(world, p)
-		log.Trace().Msgf("New tile initialized at: %v", p)
 	})
 
 	return world
@@ -80,16 +79,11 @@ func initEmptyTile(world *World, p tile.Point) {
 		log.Panic().Msgf("Duplicate tiledata index (%v): %+v, %+v", td.Index(), td, td2)
 	}
 
+	td.State.Set("tile_type", TileTypeEmpty)
+
 	td.Save(world.Grid)
 
 	world.Lookup[td.Index()] = td
-	log.Trace().Msgf("new tiledata: %+v | new header: %+v", td, td.Header)
-
-	t, ok := world.Grid.At(p.X, p.Y)
-	if !ok {
-		log.Panic().Msgf("couldn't read tile we just saved")
-	}
-	log.Trace().Msgf("what was saved: %+v | new header: %+v", world.Lookup[td.Index()], t)
 }
 
 func newTileData(p tile.Point) *TileData {

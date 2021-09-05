@@ -15,6 +15,9 @@ var (
 	//GitCommit is set to the most recent git commit hash at build time
 	GitCommit string
 
+	//ShouldRender is whether or not the current state should be rednered or not
+	ShouldRender bool
+
 	TargetFPS int64 = 144
 	TargetUPS int64 = 50
 )

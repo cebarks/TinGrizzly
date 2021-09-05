@@ -1,8 +1,14 @@
 package states
 
 import (
+	"math/rand"
+
 	"github.com/cebarks/TinGrizzly/internal/world"
+	"github.com/cebarks/TinGrizzly/resources"
+	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/kelindar/tile"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/image/colornames"
 )
 
@@ -25,17 +31,23 @@ func entityUpdate(sys *world.System, targets *world.Entity, delta float64) error
 
 // StateDevelopment is a testing state for any dev work
 type StateDevelopment struct {
-	world *world.World
-	wm    *world.Manager
+	world  *world.World
+	wm     *world.Manager
+	camera *tile.View
 }
 
 func (s StateDevelopment) Update(sc *StateContext, dt float64) error {
 	s.wm.Update(dt)
+	if sc.WindowManager. {
+		
+	}
 	return nil
 }
 
 func (s *StateDevelopment) Render(win *pixelgl.Window) error {
 	win.Clear(colornames.Aqua)
+	c := canvasFromView(s.world, s.camera)
+	c.Draw(win, pixel.IM.Scaled(pixel.ZV, 4).Moved(win.Bounds().Center()))
 	return nil
 }
 
@@ -43,28 +55,44 @@ func (s *StateDevelopment) Start() {
 	s.world = world.NewWorld(36, 36)
 	s.wm = world.NewManager(s.world)
 	s.wm.AddSystem(devSystem)
+	s.camera = s.world.Grid.View(tile.NewRect(0, 0, 9, 9), nil)
+
+	for i := 0; i < 400; i++ {
+
+		s.world.TileDataLookup(int16(rand.Intn(36)), int16(rand.Intn(36)))
+	}
 }
 
 func (s StateDevelopment) Stop() {
 }
 
-// StateNull is a testing state for any dev work
-type StateNull struct {
-}
+func canvasFromView(w *world.World, view *tile.View) *pixelgl.Canvas {
+	canvas := pixelgl.NewCanvas(pixel.R(0, 0, 9*16, 9*16))
 
-func (s StateNull) Update(sc *StateContext, dt float64) error {
-	return nil
-}
+	if view == nil {
+		log.Panic().Msg("view is nil")
+	}
 
-func (s StateNull) Render(win *pixelgl.Window) error {
-	win.Clear(colornames.Paleturquoise)
-	return nil
-}
+	view.Each(func(p tile.Point, t tile.Tile) {
+		td := w.TileDataLookupFromTile(t)
 
-func (s StateNull) Start() {
+		tt, err := td.State.Get("tile_type")
+		if err != nil {
+			log.Panic().Err(err).Msg("")
+			return
+		}
 
-}
+		typ := tt.(world.TileType)
 
-func (s StateNull) Stop() {
+		var sprite *pixel.Sprite
 
+		if typ == world.TileTypeStone {
+			sprite = resources.GetSprite("stone")
+		} else if typ == world.TileTypeEmpty {
+			sprite = resources.GetSprite("grass")
+		}
+		sprite.Draw(canvas, pixel.IM.Moved(pixel.V(8, 8)).Moved(pixel.V(float64(p.X*16), float64(p.Y*16))))
+	})
+
+	return canvas
 }

@@ -36,3 +36,24 @@ func (s *StateLoading) Start() {
 func (s StateLoading) Stop() {
 
 }
+
+// StateNull is a testing state for any dev work
+type StateNull struct {
+}
+
+func (s StateNull) Update(sc *StateContext, dt float64) error {
+	return nil
+}
+
+func (s StateNull) Render(win *pixelgl.Window) error {
+	win.Clear(colornames.Paleturquoise)
+	return nil
+}
+
+func (s StateNull) Start() {
+
+}
+
+func (s StateNull) Stop() {
+
+}

@@ -28,7 +28,7 @@ func (s *State) Get(key string) (interface{}, error) {
 	if value, ok := s.store.Load(key); ok {
 		return value, nil
 	}
-	return nil, fmt.Errorf("attempt to access invalid state key")
+	return nil, fmt.Errorf("attempt to access invalid/unset state key")
 }
 
 // GetWithDefault returns the existing value for the key if present.

@@ -6,6 +6,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/gfx"
+	"github.com/cebarks/TinGrizzly/internal/util"
 	"github.com/faiface/pixel/pixelgl"
 )
 
@@ -38,11 +39,16 @@ func (sm *StateManager) SetState(state string) {
 
 	log.Debug().Msgf("Switching states: %+v -> %+v", reflect.TypeOf(oldState), reflect.TypeOf(newState))
 
+	util.ShouldRender = false
+
 	if oldState != nil {
 		oldState.Stop()
 	}
 	sm.ActiveState = newState
 	newState.Start()
+
+	util.ShouldRender = true
+
 	log.Debug().Msgf("Switched states.")
 }
 

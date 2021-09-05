@@ -63,7 +63,7 @@ func (game *Game) renderLoop() {
 		_, fps := ticker.Tick()
 		util.DebugMap.Store("fps", fps)
 
-		if game.WindowManager.Window.Focused() {
+		if game.WindowManager.Window.Focused() && util.ShouldRender {
 			game.StateManager.ActiveState.Render(game.WindowManager.Window)
 		}
 
