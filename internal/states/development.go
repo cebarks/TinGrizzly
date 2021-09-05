@@ -38,9 +38,6 @@ type StateDevelopment struct {
 
 func (s StateDevelopment) Update(sc *StateContext, dt float64) error {
 	s.wm.Update(dt)
-	if sc.WindowManager. {
-		
-	}
 	return nil
 }
 
