@@ -52,8 +52,8 @@ func loadSheet() {
 
 	for _, t := range tiles {
 		res := GetResource("assets/sprites/" + t.Name())
-		defer res.Close()
 		img, _, err := image.Decode(res)
+		res.Close()
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to load tiles")
 		}
