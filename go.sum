@@ -55,6 +55,8 @@ github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dusk125/pixelutils v0.0.0-20210328030132-9e4d5f56d9f6/go.mod h1:H3kaIxQsgaAwKzofsURF2u2cTXofMviwDQV3RfLz/ss=
+github.com/dusk125/pixelutils v1.0.0 h1:oaJW0Bl6I+WQb4DU8gzMKxNW5+ZwBBQXQLriXsiaKEU=
+github.com/dusk125/pixelutils v1.0.0/go.mod h1:V17sw4+q2QWactw9hamp1XgGQQqKBJ6MAO1jEu+fPp8=
 github.com/dusk125/pixelutils v1.1.0 h1:FyGq6qsWHzMTB9LZIGgb0f+ZpIYFaQk19yi8C76cEPY=
 github.com/dusk125/pixelutils v1.1.0/go.mod h1:Tg6HSkIvNGsp2QowGbZngYbyLn9LoFm2kYWdvBE3q8k=
 github.com/dusk125/rectpack v1.1.1 h1:iD3mIgNohj8+nPhkuqISmqgdvRE8g7AvrWr6fAP8OsY=

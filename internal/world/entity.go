@@ -11,7 +11,7 @@ type Entity struct {
 	State      *cmap.Cmap
 }
 
-var eidGen *pixelutils.IDGen = pixelutils.NewIDGen()
+var eidGen *pixelutils.IDGen = &pixelutils.IDGen{}
 
 func NewEntity(components ...string) *Entity {
 	return &Entity{
