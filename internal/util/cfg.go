@@ -18,6 +18,8 @@ type Config struct {
 			Ups int64 `toml:"UpdatesPerSecondTarget" default:"50"`
 			Fps int64 `toml:"FramesPerSecondTarget" default:"60"`
 
+			UnlockFps bool `toml:"UnlockFps" default: "false"`
+
 			MaxWorldPoolWorkers int `toml:"MaxWorldPoolWorkers" default:"32"`
 		} `toml:"tunables" comment:"low level engine settings"`
 	} `toml:"core" comment:"Core Engine settings"`

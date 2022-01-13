@@ -1,6 +1,8 @@
 package game
 
 import (
+	"time"
+
 	"github.com/rs/zerolog/log"
 
 	"github.com/cebarks/TinGrizzly/internal/gfx"
@@ -65,10 +67,14 @@ func (game *Game) renderLoop() {
 
 		if game.WindowManager.Window.Focused() && util.ShouldRender {
 			game.StateManager.ActiveState.Render(game.WindowManager.Window)
+		} else {
+			time.Sleep(time.Second / 30)
 		}
 
 		game.WindowManager.SwapBuffers()
 
-		ticker.Wait()
+		if !util.Cfg().Core.Tunables.UnlockFps {
+			ticker.Wait()
+		}
 	}
 }
