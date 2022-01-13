@@ -2,13 +2,12 @@ package world
 
 import (
 	"github.com/dusk125/pixelutils"
-	"github.com/lrita/cmap"
 )
 
 type Entity struct {
 	Components []string
 	Id         int
-	State      *cmap.Cmap
+	State      *State
 }
 
 var eidGen *pixelutils.IDGen = &pixelutils.IDGen{}

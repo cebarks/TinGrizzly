@@ -40,7 +40,7 @@ func (wc *WorldCamera) Update(w *world.World) {
 		// 	log.Warn().Msgf("Tile '%s' does not have a sprite set!", tt.(world.TileType))
 		// }
 
-		var sprite *pixel.Sprite = resources.GetSprite(spriteName.(string))
+		var sprite *pixel.Sprite //= resources.GetSprite(spriteName.(string))
 		if typ := tt.(world.TileType); typ == world.TileTypeStone {
 			sprite = resources.GetSprite("stone")
 		} else if typ == world.TileTypeEmpty {

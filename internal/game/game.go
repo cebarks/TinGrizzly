@@ -1,6 +1,7 @@
 package game
 
 import (
+	"math"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -38,7 +39,9 @@ func (game *Game) updateLoop() {
 			return
 		}
 		dt, ups := ticker.Tick()
-		util.DebugMap.Store("ups", ups)
+		rups := math.Round(ups)
+
+		util.DebugMap.Store("ups", rups)
 
 		ctx := &states.StateContext{
 			StateManager:  game.StateManager,
@@ -63,7 +66,9 @@ func (game *Game) renderLoop() {
 
 	for util.Running {
 		_, fps := ticker.Tick()
-		util.DebugMap.Store("fps", fps)
+
+		rfps := math.Round(fps)
+		util.DebugMap.Store("fps", rfps)
 
 		if game.WindowManager.Window.Focused() && util.ShouldRender {
 			game.StateManager.ActiveState.Render(game.WindowManager.Window)
