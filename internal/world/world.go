@@ -2,6 +2,7 @@ package world
 
 import (
 	"github.com/cebarks/TinGrizzly/internal/util"
+	"github.com/cebarks/TinGrizzly/internal/world/tiles"
 	"github.com/kelindar/tile"
 	"github.com/rs/zerolog/log"
 )
@@ -68,7 +69,7 @@ func (td *TileData) Index() uint32 {
 		log.Error().Err(err).Msg("couldn't generate index for tiledata")
 	}
 
-	return state.(tile.Point).Integer()
+	return state.(*tile.Point).Integer()
 }
 
 //initTile inits TileData for all tiles in the grid and saves a header pointing to it in the Lookup map.
@@ -79,7 +80,7 @@ func initEmptyTile(world *World, p tile.Point) {
 		log.Panic().Msgf("Duplicate tiledata index (%v): %+v, %+v", td.Index(), td, td2)
 	}
 
-	td.State.Set("tile_type", TileTypeEmpty)
+	td.State.Set("type", "empty")
 
 	td.Save(world.Grid)
 
@@ -95,16 +96,16 @@ func newTileData(p tile.Point) *TileData {
 		},
 	}
 
-	td.State.Set("location", p)
-	td.State.Set("type", TileTypeEmpty)
+	td.State.Set("location", &p)
+	td.State.Set("type", "empty")
 
 	return td
 }
 
-func (w *World) SetTileTo(p tile.Point, ttype TileType) *TileData {
+func (w *World) SetTileTo(p tile.Point, typeId string) *TileData {
 	td := w.TileDataLookup(p.X, p.Y)
 
-	td.State.Set("type", ttype)
+	td.State.Set("type", tiles.TileTypes[typeId])
 
 	return td
 }

@@ -10,8 +10,10 @@ import (
 )
 
 var enforcedTypes map[string]reflect.Type = map[string]reflect.Type{
-	"tile_type": reflect.TypeOf(TileTypeEmpty),
-	"location":  reflect.TypeOf(tile.Point{}),
+	"type": reflect.TypeOf(""),
+	// "type":     reflect.TypeOf(&TileType{}),
+	"location": reflect.TypeOf(&tile.Point{}),
+	"sprite":   reflect.TypeOf(""),
 }
 
 type State struct {

@@ -28,7 +28,7 @@ func (s *StateWorld) Start() {
 		if (p.X%2 == 0 && p.Y%2 == 0) || (p.X%2 == 1 && p.Y%2 == 1) {
 			return
 		}
-		s.w.SetTileTo(p, world.TileTypeStone)
+		s.w.SetTileTo(p, "stone")
 	})
 
 	var i int16

@@ -2,14 +2,18 @@ package resources
 
 import (
 	"embed"
+	"encoding/json"
+	"errors"
 	"image"
 	_ "image/png"
 	"io/fs"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/cebarks/TinGrizzly/internal/util"
+	"github.com/cebarks/TinGrizzly/internal/world/tiles"
 	"github.com/cebarks/spriteplus"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/text"
@@ -31,8 +35,30 @@ func Setup() {
 
 	loadSheet()
 
+	loadTiles()
+
 	dur := timer.Stop()
 	log.Info().Msgf("Took %v to load resources.", dur)
+}
+
+func loadTiles() {
+	tiles, err := resourceEmbed.ReadDir("tiles")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Couldn't scan tiles dir!")
+	}
+
+	for _, t := range tiles {
+		if t.Name() == "" {
+			log.Panic().Msg("empty!!")
+			return
+		}
+
+		ttyp, err := LoadTileTypeFromBytes(GetResourceBytes("tiles/" + t.Name()))
+		if err != nil {
+			log.Panic().Err(err).Msgf("failed to load tile from: %s", t.Name())
+		}
+		log.Debug().Msgf("Loaded tile: %s", ttyp.Id)
+	}
 }
 
 func loadAtlas() {
@@ -88,12 +114,10 @@ func GetResource(path string) fs.File {
 }
 
 func GetResourceBytes(path string) []byte {
-	bytes, err := resourceEmbed.ReadFile(path)
+	bytes, err := ioutil.ReadAll(GetResource(path))
 
-	if err == fs.ErrNotExist {
-		log.Panic().Msgf("Tried to load non-existant resource: %s", path)
-	} else if err != nil {
-		log.Panic().Err(err).Msgf("Couldn't load resource: %s", path)
+	if err != nil {
+		log.Panic().Err(err).Msgf("Couldn't read resource bytes: %s", path)
 	}
 
 	return bytes
@@ -124,4 +148,24 @@ func GetResourceImage(path string) (image.Image, string) {
 
 func GetSprite(sprite string) *pixel.Sprite {
 	return Sheet.GetSprite(sprite)
+}
+
+func LoadTileTypeFromBytes(bytes []byte) (*tiles.TileType, error) {
+	ttyp := &tiles.TileType{}
+
+	if err := json.Unmarshal(bytes, ttyp); err != nil {
+		log.Error().Err(err).Msgf("could not unmarshal json tiletype")
+	}
+
+	if ttyp.Id == "" {
+		return nil, errors.New("id missing")
+	}
+
+	if ttyp.Sprite == "" {
+		log.Warn().Msgf("tile '%s' has no sprite set", ttyp.Id)
+	}
+
+	tiles.TileTypes[ttyp.Id] = ttyp
+
+	return ttyp, nil
 }

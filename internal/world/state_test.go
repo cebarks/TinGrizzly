@@ -36,7 +36,7 @@ func Test_TypeWhitelist(t *testing.T) {
 
 	assert.NotPanics(t, func() {
 		state.Set("location", tile.At(42, 42))
-		state.Set("tile_type", TileTypeEmpty)
+		state.Set("tile_type", "empty")
 	})
 
 	assert.Panics(t, func() {

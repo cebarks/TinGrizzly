@@ -104,6 +104,6 @@ tasks:
     cmds:
       - echo "Commits:$(git rev-list --count master)"
       - echo "Go Source files:$(find . -type f -name "*.go" | wc -l)"
-      - echo "Lines of Go Source:$(find . -type f -name "*.go" | wc -l)"
+      - echo "Lines of Go Source:$(cat `find . -type f -name "*.go"` | wc -l)"
       - echo "Packages:$(go list ./... | wc -l)"
       - echo "Active TODOs:$(task -s todo | wc -l)"

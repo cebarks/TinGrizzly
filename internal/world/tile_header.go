@@ -47,9 +47,9 @@ func (td *TileData) Save(grid *tile.Grid) error {
 	if err != nil {
 		return err
 	}
+	loc := l.(*tile.Point)
 
-	loc := l.(tile.Point)
-
+	log.Trace().Msgf("Saving tile at point: %v", loc)
 	grid.WriteAt(loc.X, loc.Y, td.Header.ToTile())
 	return nil
 }

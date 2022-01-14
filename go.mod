@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/cebarks/spriteplus v0.5.2
-	github.com/dusk125/pixelutils v1.0.0 // v1.1.0 breaks
+	github.com/dusk125/pixelutils v1.1.0 // v1.1.0 breaks
 	github.com/faiface/pixel v0.10.0
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20211213063430-748e38ca8aec
 	github.com/kelindar/tile v1.2.0
@@ -36,3 +36,7 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
+
+// replace github.com/cebarks/spriteplus => ../spriteplus
+
+replace github.com/dusk125/pixelutils v1.1.0 => github.com/dusk125/pixelutils v1.0.0

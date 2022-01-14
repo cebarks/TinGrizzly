@@ -1,11 +1,11 @@
 package world
 
-type TileType uint
+// type TileType uint
 
-const (
-	TileTypeEmpty TileType = iota
-	TileTypeStone
-)
+// const (
+// 	TileTypeEmpty TileType = iota
+// 	TileTypeStone
+// )
 
 type TileBitmask byte
 

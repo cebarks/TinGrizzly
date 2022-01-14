@@ -1,13 +1,12 @@
 package states
 
 import (
-	"math/rand"
-
 	"github.com/cebarks/TinGrizzly/internal/gfx"
 	"github.com/cebarks/TinGrizzly/internal/world"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/kelindar/tile"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/image/colornames"
 )
 
@@ -54,10 +53,24 @@ func (s *StateDevelopment) Start() {
 	s.wm.AddSystem(devSystem)
 	s.camera = gfx.NewCamera(s.world.Grid.View(tile.NewRect(0, 0, 21, 21), nil))
 
-	for i := 0; i < 400; i++ {
-		s.world.TileDataLookup(int16(rand.Intn(36)), int16(rand.Intn(36)))
-	}
-	s.world.Entities = append(s.world.Entities)
+	log.Trace().Msg("Starting tiletype override")
+	s.world.Grid.Each(func(p tile.Point, t tile.Tile) {
+		td := s.world.TileDataLookupFromPoint(p)
+		// if rand.Intn(1) == 0 {
+		td.State.Set("type", "grass")
+		// } else {
+		// 	td.State.Set("type", "stone")
+		// }
+		log.Trace()
+		td.Save(s.world.Grid)
+	})
+
+	log.Trace().Msg("Done initializing dev mode")
+
+	// for i := 0; i < 400; i++ {
+	// 	s.world.TileDataLookup(int16(rand.Intn(36)), int16(rand.Intn(36)))
+	// }
+	// s.world.Entities = append(s.world.Entities)
 }
 
 func (s StateDevelopment) Stop() {

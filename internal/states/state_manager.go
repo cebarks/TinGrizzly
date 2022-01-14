@@ -78,6 +78,8 @@ func CheckStateKeys(sc *StateContext) {
 		sc.StateManager.SetState("dev")
 	} else if sc.WindowManager.JustPressed(pixelgl.Key2) {
 		sc.StateManager.SetState("resource")
+	} else if sc.WindowManager.JustPressed(pixelgl.Key3) {
+		sc.StateManager.SetState("world")
 	} else if sc.WindowManager.JustPressed(pixelgl.Key9) {
 		sc.StateManager.SetState("conway")
 	}

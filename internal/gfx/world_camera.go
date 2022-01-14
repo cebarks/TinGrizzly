@@ -26,28 +26,32 @@ func NewCamera(view *tile.View) *WorldCamera {
 
 func (wc *WorldCamera) Update(w *world.World) {
 	// batch := pixel.NewBatch(pixel.MakeTrianglesData(0), resources.Sheet.SourcePic())
+	log.Trace().Msg("Updating camera canvas")
 	wc.View.Each(func(p tile.Point, t tile.Tile) {
 		td := w.TileDataLookupFromTile(t)
 
-		tt, err := td.State.Get("tile_type")
+		tts, err := td.State.Get("type")
 		if err != nil {
 			log.Panic().Err(err).Msg("could not get tile_type for tile in view")
 			return
 		}
 
-		// spriteName, err := td.State.Get("sprite")
-		// if err != nil {
-		// 	log.Warn().Msgf("Tile '%s' does not have a sprite set!", tt.(world.TileType))
-		// }
-
-		var sprite *pixel.Sprite //= resources.GetSprite(spriteName.(string))
-		if typ := tt.(world.TileType); typ == world.TileTypeStone {
-			sprite = resources.GetSprite("stone")
-		} else if typ == world.TileTypeEmpty {
-			sprite = resources.GetSprite("grass")
-		} else {
-			sprite = resources.GetSprite("error")
+		spriteName, err := td.State.Get("sprite")
+		log.Printf("id=%s spriteName1=%s", tts, spriteName)
+		if err != nil {
+			// log.Warn().Msgf("Tile '%s' does not have a sprite set!", tiles.TileTypes[tts.(string)])
+			spriteName = "error"
 		}
+
+		var sprite *pixel.Sprite = resources.GetSprite(spriteName.(string))
+		log.Printf("spriteName2: %s", spriteName)
+		// if typ := tt.(world.TileType); typ == world.TileTypeStone {
+		// 	sprite = resources.GetSprite("stone")
+		// } else if typ == world.TileTypeEmpty {
+		// 	sprite = resources.GetSprite("grass")
+		// } else {
+		// 	sprite = resources.GetSprite("error")
+		// }
 
 		// sprite.Draw(batch, pixel.IM.Moved(pixel.V(8, 8)).Moved(pixel.V(float64(p.X*16), float64(p.Y*16))))
 		sprite.Draw(wc.Canvas, pixel.IM.Moved(pixel.V(8, 8)).Moved(pixel.V(float64(p.X*16), float64(p.Y*16))))
