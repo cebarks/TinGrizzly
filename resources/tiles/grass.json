@@ -1,0 +1,7 @@
+{
+    "id": "grass",
+    "sprite": "grass",
+    "data": {
+        "test":"test123"
+    }
+}
