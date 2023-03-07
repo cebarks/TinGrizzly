@@ -14,7 +14,7 @@ require (
 	github.com/rs/zerolog v1.26.1
 	github.com/snwfdhmp/errlog v0.0.0-20201130182740-aef7af651c46
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
+	golang.org/x/image v0.5.0
 )
 
 require (
@@ -33,7 +33,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/afero v1.8.0 // indirect
 	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
-	golang.org/x/text v0.3.8 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
